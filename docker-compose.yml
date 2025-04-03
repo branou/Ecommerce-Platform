@@ -1,0 +1,84 @@
+services:
+  # PostgreSQL service
+  postgres:
+    image: postgres
+    container_name: postgres-db
+    environment:
+      - POSTGRES_USER=adminPostgres
+      - POSTGRES_PASSWORD=passwordPostgres
+      - POSTGRES_DB=ecommerce_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  # MongoDB service
+  mongodb:
+    image: mongo
+    container_name: mongo-db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=adminDb
+      - MONGO_INITDB_ROOT_PASSWORD=passwordDb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - backend
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
+    depends_on:
+      - mongodb
+
+  # Keycloak service
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1.4
+    container_name: keycloak
+    ports:
+      - "8080:8080"
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+    command: [ "start-dev" ]
+    depends_on:
+      - postgres
+    networks:
+      - backend
+
+      # Your Spring Boot backend service (e.g., springboot-backend)
+      #springboot-backend:
+      # build:
+      #  context: .
+      # dockerfile: Dockerfile
+      #container_name: springboot-backend
+      #environment:
+      # - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5433/ecommerce_db
+      ##- SPRING_DATASOURCE_USERNAME=adminPostgres
+      #- SPRING_DATASOURCE_PASSWORD=passwordPostgres
+      #- SPRING_DATA_MONGODB_URI=mongodb://admin:adminpassword@mongodb:27017
+      #ports:
+      # - "8082:8082"
+      #depends_on:
+      # - postgres
+      #- mongodb
+      #networks:
+      # - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  mongo-data:

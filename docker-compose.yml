@@ -27,7 +27,6 @@ services:
       - mongo-data:/data/db
     networks:
       - backend
-
   mongo-express:
     image: mongo-express
     restart: always
@@ -55,6 +54,14 @@ services:
       - postgres
     networks:
       - backend
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
 
       # Your Spring Boot backend service (e.g., springboot-backend)
       #springboot-backend:

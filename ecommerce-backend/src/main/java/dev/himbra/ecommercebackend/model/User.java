@@ -1,5 +1,4 @@
 package dev.himbra.ecommercebackend.model;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
+@Entity(name = "users")
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 public class User {
 

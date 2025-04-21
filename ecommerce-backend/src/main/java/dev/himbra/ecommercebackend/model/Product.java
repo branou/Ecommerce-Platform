@@ -19,7 +19,6 @@ public class Product {
     @Column(columnDefinition = "TEXT")
     private String description;
     private Double price;
-    private String sku;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -45,9 +44,7 @@ public class Product {
     private Integer stockQuantity;
     private Boolean inStock;
 
-    // 🔹 Images
-    @ElementCollection
-    private List<String> images;
+    private List<Image> images;
 
     // 🔹 Timestamps
     private LocalDate createdAt;

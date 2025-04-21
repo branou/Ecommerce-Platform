@@ -17,4 +17,13 @@ public class Cart {
     private List<CartItem> items = new ArrayList<>();
 
     private LocalDateTime lastUpdated;
+    @Transient
+    public Double getTotalPrice() {
+        if (items == null || items.isEmpty()) {
+            return 0.0;
+        }
+        return items.stream()
+                .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
+                .sum();
+    }
 }

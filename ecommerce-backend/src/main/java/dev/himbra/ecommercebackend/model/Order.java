@@ -1,4 +1,5 @@
 package dev.himbra.ecommercebackend.model;
+import dev.himbra.ecommercebackend.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.List;
 @Table(name = "products")
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
-public class Order {
+public class Order extends BaseEntity {
     @Id @GeneratedValue
     private Long id;
 
@@ -25,6 +26,5 @@ public class Order {
     private List<OrderItem> items = new ArrayList<>();
 
     private BigDecimal totalAmount;
-    private LocalDateTime orderDate;
 }
 

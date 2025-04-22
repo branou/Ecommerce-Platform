@@ -1,9 +1,14 @@
 package dev.himbra.ecommercebackend.model;
+import dev.himbra.ecommercebackend.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "products")
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
-public class Product {
+public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,14 +45,10 @@ public class Product {
 
     private String color;
 
-    // 🔹 Stock & Status
     private Integer stockQuantity;
     private Boolean inStock;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
-
-    // 🔹 Timestamps
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
 
 }

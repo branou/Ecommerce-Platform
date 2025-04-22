@@ -1,4 +1,5 @@
 package dev.himbra.ecommercebackend.model;
+import dev.himbra.ecommercebackend.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Entity(name = "users")
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
-public class User {
+public class User extends BaseEntity {
 
     @Id
     private String id; // Store Keycloak UUID as the primary key
@@ -21,9 +22,7 @@ public class User {
 
     private String lastName;
 
-    private String role; // Optional, can mirror Keycloak roles
-
-    private LocalDateTime createdAt;
+    private String role;
 
     // Relationships
     @OneToMany(mappedBy = "user")

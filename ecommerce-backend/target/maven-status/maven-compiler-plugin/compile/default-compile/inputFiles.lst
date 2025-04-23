@@ -1,0 +1,17 @@
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\config\ApplicationAuditAware.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\config\BaseEntity.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\EcommerceBackendApplication.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\model\Brand.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\model\Cart.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\model\CartItem.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\model\Category.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\model\Image.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\model\Order.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\model\OrderItem.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\model\Product.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\model\Review.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\model\SubCategory.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\model\Taille.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\model\User.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\model\Wishlist.java
+D:\GMIPFE\Ecommerce-Platform\ecommerce-backend\src\main\java\dev\himbra\ecommercebackend\security\SecurityConfig.java

@@ -13,7 +13,6 @@ import lombok.Setter;
 public class CartItem {
     @Id @GeneratedValue
     private Long id;
-
     @ManyToOne
     private Cart cart;
 
@@ -21,4 +20,5 @@ public class CartItem {
     private Product product;
 
     private Integer quantity;
+
 }

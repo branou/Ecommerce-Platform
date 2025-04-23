@@ -1,7 +1,9 @@
 package dev.himbra.ecommercebackend.security;
 
+import dev.himbra.ecommercebackend.config.ApplicationAuditAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -63,5 +65,8 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-
+    @Bean
+    public AuditorAware<String> auditorAware() {
+        return new ApplicationAuditAware(); // 👈 this matches the reference in @EnableJpaAuditing
+    }
 }

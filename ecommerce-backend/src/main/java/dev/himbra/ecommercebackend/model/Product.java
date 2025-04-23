@@ -1,16 +1,8 @@
 package dev.himbra.ecommercebackend.model;
+
 import dev.himbra.ecommercebackend.config.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDate;
+import lombok.*;
 import java.util.List;
 
 @Entity
@@ -24,7 +16,11 @@ public class Product extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
     private Double price;
+    private String color;
+    private Integer stockQuantity;
+    private Boolean inStock;
 
+    //RELATIONSHIPS
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -42,11 +38,6 @@ public class Product extends BaseEntity {
     @Column(name = "taille")
     @Enumerated(EnumType.STRING)
     private List<Taille> tailles;
-
-    private String color;
-
-    private Integer stockQuantity;
-    private Boolean inStock;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;

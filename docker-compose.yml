@@ -15,30 +15,35 @@ services:
       - backend
 
   # MongoDB service
-  mongodb:
+  mongo:
     image: mongo
+    restart: always
     container_name: mongo-db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=adminDb
       - MONGO_INITDB_ROOT_PASSWORD=passwordDb
+      - MONGO_INITDB_DATABASE=ecommerce_db
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
     networks:
       - backend
+  # Mongo Express service
   mongo-express:
     image: mongo-express
     restart: always
     ports:
       - 8081:8081
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_MONGODB_ADMINUSERNAME: adminDb
+      ME_CONFIG_MONGODB_ADMINPASSWORD: passwordDb
+      ME_CONFIG_MONGODB_URL: mongodb://adminDb:passwordDb@mongo:27017/
       ME_CONFIG_BASICAUTH: false
+    networks:
+      - backend
     depends_on:
-      - mongodb
+      - mongo
 
   # Keycloak service
   keycloak:
@@ -54,11 +59,27 @@ services:
       - postgres
     networks:
       - backend
+    volumes:
+      - keycloak-data:/opt/keycloak/data
+
+      # Redis service
   redis:
     image: redis
     container_name: redis
     ports:
       - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - backend
+    # RedisInsight service
+  redisinsight:
+    image: redis/redisinsight
+    container_name: redisinsight
+    ports:
+      - "8001:5540"
+    volumes:
+      - redisinsight-data:/db
     networks:
       - backend
 
@@ -89,3 +110,6 @@ networks:
 volumes:
   postgres-data:
   mongo-data:
+  redisinsight-data:
+  redis-data:
+  keycloak-data:

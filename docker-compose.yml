@@ -84,7 +84,7 @@ services:
       - backend
 
 
-      # Your Spring Boot backend service (e.g., springboot-backend)
+      # my Spring Boot backend service (e.g., springboot-backend)
       #springboot-backend:
       # build:
       #  context: .

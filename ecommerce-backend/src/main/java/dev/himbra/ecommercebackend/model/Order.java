@@ -20,6 +20,7 @@ public class Order extends BaseEntity {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "userId")
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)

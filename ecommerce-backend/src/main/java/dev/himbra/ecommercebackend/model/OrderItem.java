@@ -18,12 +18,15 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "orderId")
     private Order order;
 
     @ManyToOne
+    @JoinColumn(name = "productId")
     private Product product;
 
     private Integer quantity;
 
     private BigDecimal priceAtPurchase;
+
 }

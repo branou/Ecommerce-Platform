@@ -42,6 +42,9 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 
+    @ManyToMany(mappedBy = "product")
+    private List<Wishlist> wishlists;
+
     @Transient
     public BigDecimal getDiscountedPrice() {
         if (discountPercent != null && discountPercent > 0) {

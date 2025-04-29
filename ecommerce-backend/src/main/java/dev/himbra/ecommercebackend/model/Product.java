@@ -3,6 +3,9 @@ package dev.himbra.ecommercebackend.model;
 import dev.himbra.ecommercebackend.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -15,10 +18,14 @@ public class Product extends BaseEntity {
     private String name;
     @Column(columnDefinition = "TEXT")
     private String description;
-    private Double price;
-    private String color;
+    private BigDecimal price;
+    private BigDecimal discountedPrice;
     private Integer stockQuantity;
     private Boolean inStock;
+    private LocalDate expiryDate;
+    private Boolean isPromoted;
+    private Integer discountPercent;
+    private String slug;
 
     //RELATIONSHIPS
     @ManyToOne
@@ -33,13 +40,8 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "product_tailles", joinColumns = @JoinColumn(name = "product_id"))
-    @Column(name = "taille")
-    @Enumerated(EnumType.STRING)
-    private List<Taille> tailles;
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
+
 
 }

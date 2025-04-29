@@ -1,19 +1,28 @@
 package dev.himbra.ecommercebackend.model;
 
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "wishlists")
+@Entity
+@Table(name = "wishlists")
 public class Wishlist {
-
     @Id
-    private String id;
-    private String userId;
-    private List<String> productIds;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @OneToOne
+    @JoinColumn(name="userId")
+    private User user;
+    @ManyToMany
+    @JoinTable(
+            name = "wishlist_products",
+            joinColumns = @JoinColumn(name = "wishlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> product;
 
 }

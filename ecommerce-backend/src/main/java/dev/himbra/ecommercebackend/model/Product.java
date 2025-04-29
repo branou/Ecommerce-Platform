@@ -19,12 +19,11 @@ public class Product extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
     private BigDecimal price;
-    private BigDecimal discountedPrice;
     private Integer stockQuantity;
     private Boolean inStock;
-    private LocalDate expiryDate;
     private Boolean isPromoted;
     private Integer discountPercent;
+    @Column(nullable = false, unique = true)
     private String slug;
 
     //RELATIONSHIPS
@@ -43,5 +42,26 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 
+    @Transient
+    public BigDecimal getDiscountedPrice() {
+        if (discountPercent != null && discountPercent > 0) {
+            return price.subtract(price.multiply(BigDecimal.valueOf(discountPercent)).divide(BigDecimal.valueOf(100)));
+        }
+        return price;
+    }
+    @PrePersist
+    @PreUpdate
+    public void preSave() {
+        // Stock logic
+        this.inStock = stockQuantity != null && stockQuantity > 0;
+
+        // Slug logic
+        if (name != null && (slug == null || slug.isEmpty())) {
+            this.slug = name.toLowerCase()
+                    .replaceAll("[^a-z0-9\\s]", "")  // Remove non-alphanumeric characters
+                    .replaceAll("\\s+", "-")         // Replace spaces with dashes
+                    .replaceAll("-+$", "");           // Remove trailing dashes
+        }
+    }
 
 }

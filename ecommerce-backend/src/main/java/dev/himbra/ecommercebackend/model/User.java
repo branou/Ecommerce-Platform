@@ -32,4 +32,5 @@ public class User extends BaseEntity {
     private Cart cart;
     @OneToOne(mappedBy = "user")
     private Wishlist wishlist;
+
 }

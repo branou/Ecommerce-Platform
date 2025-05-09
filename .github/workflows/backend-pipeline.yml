@@ -4,9 +4,18 @@ on:
   push:
     branches:
       - main
+    paths:
+      - ecommerce-backend/**
+      - 'docker-compose.yml'
+      - .github/workflows/backend-pipeline.yml
   pull_request:
     branches:
       - main
+    paths:
+        - ecommerce-backend/**
+        - 'docker-compose.yml'
+        - .github/workflows/backend-pipeline.yml
+
 jobs:
   build:
     runs-on: ubuntu-latest

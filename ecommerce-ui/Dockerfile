@@ -1,14 +1,13 @@
-# Use a base image with OpenJDK
-FROM openjdk:17-jdk-slim
-
-# Set the working directory
+# Stage 1: Compile and Build angular codebase
+FROM node:20 as build
 WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
 
-# Copy the compiled JAR file into the container
-COPY target/ecommerce-backend.jar /app/ecommerce-backend.jar
-
-# Expose the port that Spring Boot app will run on
-EXPOSE 8082
-
-# Command to run the application
-ENTRYPOINT ["java", "-jar", "ecommerce-backend.jar"]
+# Stage 2: Serve app with nginx server
+FROM nginx:alpine
+COPY --from=build /app/dist/ecommerce-ui /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80

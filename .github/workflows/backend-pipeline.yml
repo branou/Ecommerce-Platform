@@ -20,7 +20,7 @@ jobs:
             java-version: '17'
       - name: Build with maven
         run: mvn clean install -DskipTests
-        working-directory: ./backend
+        working-directory: ./ecommerce-backend
       - name: Extract project version
         id: extract_version
         run: |

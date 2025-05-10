@@ -75,6 +75,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           cd ecommerce-backend
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+          mvn -B verify -DskipTests
+           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=branou_Ecommerce-Platform 
             

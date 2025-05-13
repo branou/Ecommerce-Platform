@@ -5,12 +5,9 @@ import dev.himbra.ecommercebackend.dto.ProductResponse;
 import dev.himbra.ecommercebackend.mappers.ProductMapper;
 import dev.himbra.ecommercebackend.model.*;
 import dev.himbra.ecommercebackend.repository.*;
-import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -35,7 +32,7 @@ public class ProductService {
         );
     }
 
-    // A methods that handle Update product operation
+    // A method that handle Update product operation
     public ProductResponse updateProduct(ProductRequest productRequest, Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -55,19 +52,20 @@ public class ProductService {
         );
     }
 
-    // A methods that handle Delete product operation
+    // A method that handle Delete product operation
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         productRepository.delete(product);
     }
-    // A methods that handle get product operation
+    // A method that handle get product operation
     public ProductResponse getProduct(Long id) {
         return productRepository.findById(id)
                 .map(productMapper::toProductDTO)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
-    // Add methods that handle get all products operation
+    // A method that handle get all products operation
+
 
 
 }

@@ -23,8 +23,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findPromotedProducts(Pageable pageable);
     @Query("SELECT p FROM Product p WHERE p.inStock = true")
     Page<Product> findInStockProducts(Pageable pageable);
-    @Query("SELECT p FROM Product p WHERE p.inStock = false")
-    Page<Product> findOutOfStockProducts(Pageable pageable);
-
+    
 
 }

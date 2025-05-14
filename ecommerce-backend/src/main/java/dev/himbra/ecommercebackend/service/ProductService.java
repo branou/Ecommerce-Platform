@@ -1,11 +1,15 @@
 package dev.himbra.ecommercebackend.service;
 
+import dev.himbra.ecommercebackend.dto.PageResponse;
 import dev.himbra.ecommercebackend.dto.ProductRequest;
 import dev.himbra.ecommercebackend.dto.ProductResponse;
 import dev.himbra.ecommercebackend.mappers.ProductMapper;
 import dev.himbra.ecommercebackend.model.*;
 import dev.himbra.ecommercebackend.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -14,10 +18,7 @@ import org.springframework.stereotype.Service;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
-    private final CategoryRepository categoryRepository;
-    private final SubCategoryRepository subCategoryRepository;
-    private final BrandRepository brandRepository;
-    private final ImageRepository imageRepository;
+
     // find product by id
     public ProductResponse findProductById(Long id) {
         return productRepository.findById(id)
@@ -65,6 +66,19 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
     // A method that handle get all products operation
+    public PageResponse<ProductResponse> getAllProducts(int page, int size) {
+        Page<Product> products = productRepository.findAll(PageRequest.of(page, size, Sort.by("createdDate").descending()));
+        return new PageResponse<>(
+                products.getNumber(),
+                products.getSize(),
+                products.getTotalElements(),
+                products.getTotalPages(),
+                products.isFirst(),
+                products.isLast(),
+                products.map(productMapper::toProductDTO).getContent()
+        );
+    }
+
 
 
 

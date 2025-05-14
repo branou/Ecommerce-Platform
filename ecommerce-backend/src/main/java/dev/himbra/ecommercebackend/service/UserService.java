@@ -28,7 +28,7 @@ public class UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (!(authentication instanceof JwtAuthenticationToken jwtAuth)) {
-            throw new AccessDeniedException("Unauthorized or invalid authentication");
+            throw new AccessDeniedException("You do not have permission to access this resource");
         }
 
         Jwt jwt = jwtAuth.getToken();

@@ -6,6 +6,7 @@ import dev.himbra.ecommercebackend.dto.ProductResponse;
 import dev.himbra.ecommercebackend.mappers.ProductMapper;
 import dev.himbra.ecommercebackend.model.*;
 import dev.himbra.ecommercebackend.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +24,7 @@ public class ProductService {
     public ProductResponse findProductById(Long id) {
         return productRepository.findById(id)
                 .map(productMapper::toProductDTO)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
     }
     // A method that handle Add product operation
     public ProductResponse addProduct(ProductRequest product) {
@@ -36,7 +37,7 @@ public class ProductService {
     // A method that handle Update product operation
     public ProductResponse updateProduct(ProductRequest productRequest, Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
         Product productMapped = productMapper.toProduct(productRequest);
         product.setName(productMapped.getName());
         product.setDescription(productMapped.getDescription());
@@ -56,14 +57,14 @@ public class ProductService {
     // A method that handle Delete product operation
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
         productRepository.delete(product);
     }
     // A method that handle get product operation
     public ProductResponse getProduct(Long id) {
         return productRepository.findById(id)
                 .map(productMapper::toProductDTO)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
     }
     // A method that handle get all products operation
     public PageResponse<ProductResponse> getAllProducts(int page, int size) {

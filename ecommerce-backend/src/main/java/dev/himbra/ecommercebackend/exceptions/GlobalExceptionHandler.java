@@ -24,11 +24,21 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                 ErrorResponse
                         .builder()
                         .error("Access Denied")
                         .status(HttpStatus.FORBIDDEN.value())
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now()).build());
+    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                ErrorResponse
+                        .builder()
+                        .error("Internal error, please contact the admin")
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .message(ex.getMessage())
                         .timestamp(LocalDateTime.now()).build());
     }

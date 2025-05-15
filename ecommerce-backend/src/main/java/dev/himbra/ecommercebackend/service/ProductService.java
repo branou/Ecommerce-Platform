@@ -79,7 +79,84 @@ public class ProductService {
                 products.map(productMapper::toProductDTO).getContent()
         );
     }
-
+    // A method that handle get product by category operation
+    public PageResponse<ProductResponse> getProductsByCategory(Long categoryId, int page, int size) {
+        Page<Product> products = productRepository.findByCategoryId(categoryId, PageRequest.of(page, size));
+        return new PageResponse<>(
+                products.getNumber(),
+                products.getSize(),
+                products.getTotalElements(),
+                products.getTotalPages(),
+                products.isFirst(),
+                products.isLast(),
+                products.map(productMapper::toProductDTO).getContent()
+        );
+    }
+    // A method that handle get product by sub category operation
+    public PageResponse<ProductResponse> getProductsBySubCategory(Long subCategoryId, int page, int size) {
+        Page<Product> products = productRepository.findBySubCategoryId(subCategoryId, PageRequest.of(page, size));
+        return new PageResponse<>(
+                products.getNumber(),
+                products.getSize(),
+                products.getTotalElements(),
+                products.getTotalPages(),
+                products.isFirst(),
+                products.isLast(),
+                products.map(productMapper::toProductDTO).getContent()
+        );
+    }
+    // A method that handle get product by brand operation
+    public PageResponse<ProductResponse> getProductsByBrand(Long brandId, int page, int size) {
+        Page<Product> products = productRepository.findByBrandId(brandId, PageRequest.of(page, size));
+        return new PageResponse<>(
+                products.getNumber(),
+                products.getSize(),
+                products.getTotalElements(),
+                products.getTotalPages(),
+                products.isFirst(),
+                products.isLast(),
+                products.map(productMapper::toProductDTO).getContent()
+        );
+    }
+    // A method that handle get product by keyword operation
+    public PageResponse<ProductResponse> getProductsByKeyword(String keyword, int page, int size) {
+        Page<Product> products = productRepository.searchByKeyword(keyword, PageRequest.of(page, size));
+        return new PageResponse<>(
+                products.getNumber(),
+                products.getSize(),
+                products.getTotalElements(),
+                products.getTotalPages(),
+                products.isFirst(),
+                products.isLast(),
+                products.map(productMapper::toProductDTO).getContent()
+        );
+    }
+    // A method that handle get product by promoted operation
+    public PageResponse<ProductResponse> getPromotedProducts(int page, int size) {
+        Page<Product> products = productRepository.findPromotedProducts(PageRequest.of(page, size));
+        return new PageResponse<>(
+                products.getNumber(),
+                products.getSize(),
+                products.getTotalElements(),
+                products.getTotalPages(),
+                products.isFirst(),
+                products.isLast(),
+                products.map(productMapper::toProductDTO).getContent()
+        );
+    }
+    // A method that handle get product by in stock operation
+    public PageResponse<ProductResponse> getInStockProducts(int page, int size) {
+        Page<Product> products = productRepository.findInStockProducts(PageRequest.of(page, size));
+        return new PageResponse<>(
+                products.getNumber(),
+                products.getSize(),
+                products.getTotalElements(),
+                products.getTotalPages(),
+                products.isFirst(),
+                products.isLast(),
+                products.map(productMapper::toProductDTO).getContent()
+        );
+    }
 
 
 

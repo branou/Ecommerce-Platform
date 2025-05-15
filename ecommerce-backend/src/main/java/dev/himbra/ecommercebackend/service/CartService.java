@@ -12,7 +12,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,67 +28,48 @@ public class CartService {
     // Add methods to handle cart operations, such as adding items, removing items, and checking out.
     // Example method to add an item to the cart
     @Transactional
-    public void addCartItemToCart(Long productId, int quantity,String guestId) {
+    public void addCartItemToCart(Long productId, int quantity, String guestId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
+
+        Cart cart = getOrCreateCart(guestId);
+        addOrUpdateCartItem(cart, product, quantity);
+    }
+
+    private Cart getOrCreateCart(String guestId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if (authentication instanceof JwtAuthenticationToken jwtAuth) {
-            Jwt jwt = jwtAuth.getToken();
-            String userId = jwt.getClaim("sub");
-            // Load User entity
+            String userId = jwtAuth.getToken().getClaim("sub");
+
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
-            //  Load Product entity
-            Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
-            // Find the cart for the user
-            Cart cart = cartRepository.findByUserId(userId)
-                    .orElseGet(()-> {
-                        Cart newCart = Cart.builder()
-                                .user(user).build();
-                        return cartRepository.save(newCart);
-                    });
 
-            // Check if the product is already in the cart
-            Optional<CartItem> cartItemOpt = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId);
-            if (cartItemOpt.isPresent()) {
-                // 3. If exists, update quantity
-                CartItem existingItem = cartItemOpt.get();
-                existingItem.setQuantity(existingItem.getQuantity() + quantity);
-                cartItemRepository.save(existingItem);
-            } else {
-                // 4. If not exists, create new CartItem
-                CartItem newItem = CartItem.builder()
-                        .cart(cart)
-                        .product(product)
-                        .quantity(quantity)
-                        .build();
-                cartItemRepository.save(newItem);
-            }
+            return cartRepository.findByUserId(userId)
+                    .orElseGet(() -> cartRepository.save(Cart.builder().user(user).build()));
         }
-        else {
-            // Load or create cart
-            Cart cart = cartRepository.findByGuestId(guestId)
-                    .orElseGet(() -> cartRepository.save(Cart.builder().guestId(guestId).build()));
-            // Load product
-            Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
-            // Find or create cart item
-            Optional<CartItem> cartItemOpt = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId);
+        return cartRepository.findByGuestId(guestId)
+                .orElseGet(() -> cartRepository.save(Cart.builder().guestId(guestId).build()));
+    }
 
-            if (cartItemOpt.isPresent()) {
-                CartItem existing = cartItemOpt.get();
-                existing.setQuantity(existing.getQuantity() + quantity);
-                cartItemRepository.save(existing);
-            } else {
-                CartItem newItem = CartItem.builder()
-                        .cart(cart)
-                        .product(product)
-                        .quantity(quantity)
-                        .build();
-                cartItemRepository.save(newItem);
-            }
+    private void addOrUpdateCartItem(Cart cart, Product product, int quantity) {
+        Optional<CartItem> cartItemOpt = cartItemRepository.findByCartIdAndProductId(cart.getId(), product.getId());
+
+        if (cartItemOpt.isPresent()) {
+            CartItem existingItem = cartItemOpt.get();
+            existingItem.setQuantity(existingItem.getQuantity() + quantity);
+            cartItemRepository.save(existingItem);
+        } else {
+            CartItem newItem = CartItem.builder()
+                    .cart(cart)
+                    .product(product)
+                    .quantity(quantity)
+                    .build();
+            cartItemRepository.save(newItem);
         }
-        }
+    }
+
     public void transferGuestCartToUser(String guestId, String userId) {
         Optional<Cart> guestCartOpt = cartRepository.findByGuestId(guestId);
         Optional<Cart> userCartOpt = cartRepository.findByUserId(userId);
@@ -127,6 +107,25 @@ public class CartService {
         }
     }
 
+
+    public void removeCartItemFromCart(Long productId, String guestId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Cart cart;
+
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String userId = jwtAuth.getToken().getClaim("sub");
+            cart = cartRepository.findByUserId(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("Cart not found for user ID: " + userId));
+        } else {
+            cart = cartRepository.findByGuestId(guestId)
+                    .orElseThrow(() -> new EntityNotFoundException("Cart not found for guest ID: " + guestId));
+        }
+
+        CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId)
+                .orElseThrow(() -> new EntityNotFoundException("Cart item not found for product ID: " + productId));
+
+        cartItemRepository.delete(cartItem);
+    }
 
 }
 

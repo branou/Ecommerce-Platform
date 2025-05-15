@@ -1,16 +1,13 @@
 package dev.himbra.ecommercebackend.model;
 import dev.himbra.ecommercebackend.config.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Entity(name = "users")
 @AllArgsConstructor @NoArgsConstructor
-@Getter @Setter
+@Getter @Setter @Builder
 public class User extends BaseEntity {
 
     @Id

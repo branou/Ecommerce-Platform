@@ -19,13 +19,6 @@ import org.springframework.stereotype.Service;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
-
-    // find product by id
-    public ProductResponse findProductById(Long id) {
-        return productRepository.findById(id)
-                .map(productMapper::toProductDTO)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
-    }
     // A method that handle Add product operation
     public ProductResponse addProduct(ProductRequest product) {
 
@@ -157,7 +150,6 @@ public class ProductService {
                 products.map(productMapper::toProductDTO).getContent()
         );
     }
-
 
 
 }

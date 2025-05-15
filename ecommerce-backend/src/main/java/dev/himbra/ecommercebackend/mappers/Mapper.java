@@ -8,6 +8,7 @@ import dev.himbra.ecommercebackend.repository.BrandRepository;
 import dev.himbra.ecommercebackend.repository.CategoryRepository;
 import dev.himbra.ecommercebackend.repository.ImageRepository;
 import dev.himbra.ecommercebackend.repository.SubCategoryRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.Named;
 
@@ -25,19 +26,19 @@ public class Mapper {
     public Category fetchCategoryById(Long id) {
         if (id == null) return null;
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
     }
     @Named("fetchSubCategoryById")
     public SubCategory fetchSubCategoryById(Long id) {
         if (id == null) return null;
         return subCategoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("SubCategory not found"));
+                .orElseThrow(() -> new EntityNotFoundException("SubCategory not found"));
     }
     @Named("fetchBrandById")
     public Brand fetchBrandById(Long id) {
         if (id == null) return null;
         return brandRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Brand not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Brand not found"));
     }
     @Named("fetchImagesByUrls")
     public List<Image> fetchImagesByUrls(List<String> urls) {

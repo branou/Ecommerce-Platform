@@ -1,10 +1,7 @@
 package dev.himbra.ecommercebackend.model;
 import dev.himbra.ecommercebackend.config.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Cart extends BaseEntity {
     @Id @GeneratedValue
     private Long id;
@@ -22,6 +19,8 @@ public class Cart extends BaseEntity {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<>();
+    @Column(unique = true)
+    private String guestId;
 
     @Transient
     public BigDecimal getTotalPrice() {

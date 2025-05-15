@@ -2,7 +2,6 @@ package dev.himbra.ecommercebackend.mappers;
 
 import dev.himbra.ecommercebackend.dto.ProductRequest;
 import dev.himbra.ecommercebackend.dto.ProductResponse;
-import dev.himbra.ecommercebackend.model.Category;
 import dev.himbra.ecommercebackend.model.Image;
 import dev.himbra.ecommercebackend.model.Product;
 import org.mapstruct.Mapper;

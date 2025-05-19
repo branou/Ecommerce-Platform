@@ -15,8 +15,6 @@ import java.util.List;
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 public class Order extends BaseEntity {
-    @Id @GeneratedValue
-    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "userId")

@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req.requestMatchers(
+                        "/api/brands","/api/categories","/api/subcategories",
                         "/auth/*","/v2/api-docs",
                         "/v2/api-docs",
                         "/v3/api-docs",
@@ -69,4 +70,5 @@ public class SecurityConfig {
     public AuditorAware<String> auditorAware() {
         return new ApplicationAuditAware(); // 👈 this matches the reference in @EnableJpaAuditing
     }
+
 }

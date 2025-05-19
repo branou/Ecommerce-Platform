@@ -3,7 +3,7 @@ package dev.himbra.ecommercebackend.service;
 import dev.himbra.ecommercebackend.dto.PageResponse;
 import dev.himbra.ecommercebackend.dto.ProductRequest;
 import dev.himbra.ecommercebackend.dto.ProductResponse;
-import dev.himbra.ecommercebackend.mappers.ProductMapper;
+import dev.himbra.ecommercebackend.mapper.ProductMapper;
 import dev.himbra.ecommercebackend.model.*;
 import dev.himbra.ecommercebackend.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,6 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -19,11 +22,25 @@ import org.springframework.stereotype.Service;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final FileStorageService fileStorageService;
     // A method that handle Add product operation
-    public ProductResponse addProduct(ProductRequest product) {
+    public ProductResponse addProduct(ProductRequest productRequest,List<MultipartFile> images) {
+        Product product = productMapper.toProduct(productRequest);
+        List<Image> imageEntities = images.stream()
+                .map(file -> {
+                    // Save the file (e.g., locally or to S3)
+                    String imageUrl = fileStorageService.storeFile(file); // <-- your logic
+                    Image image = new Image();
+                    image.setUrl(imageUrl);
+                    image.setAltText(file.getOriginalFilename()); // or other logic
+                    image.setProduct(product);
+                    return image;
+                }).toList();
+
+        product.setImages(imageEntities);
 
         return productMapper.toProductDTO(
-                productRepository.save(productMapper.toProduct(product))
+                productRepository.save(product)
         );
     }
 

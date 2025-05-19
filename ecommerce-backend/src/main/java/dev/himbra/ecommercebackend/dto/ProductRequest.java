@@ -14,7 +14,6 @@ public record ProductRequest(
         @Min(0) @Max(100) Integer discountPercent,
         @NotNull Long categoryId,
         Long subCategoryId,
-        Long brandId,
-        List<String> imageUrls
+        Long brandId
 ) {
 }

@@ -39,24 +39,23 @@ services:
     restart: always
 
 # my Spring Boot backend service (e.g., springboot-backend)
-  springboot-backend:
-    build: ./ecommerce-backend
-    container_name: springboot-backend
-    environment:
-      SPRING_DATASOURCE_URL : jdbc:postgresql://postgres:5432/ecommerce_db
-      SPRING_DATASOURCE_USERNAME : admin
-      SPRING_DATASOURCE_PASSWORD : password
-      KEYCLOAK_JWT_ISSUER : http://keycloack:8080/realms/myRealm
-    ports:
-      - "8082:8082"
-    restart: on-failure
-    depends_on:
-      - redis
-      - redisinsight
-      - keycloak
-      - postgres
-    networks:
-      - backend
+  #springboot-backend:
+  #  build: ./ecommerce-backend
+    #container_name: springboot-backend
+   # environment:
+      #SPRING_DATASOURCE_URL : jdbc:postgresql://postgres:5432/ecommerce_db
+      #SPRING_DATASOURCE_USERNAME : admin
+      #SPRING_DATASOURCE_PASSWORD : password
+     # KEYCLOAK_JWT_ISSUER : http://keycloack:8080/realms/myRealm
+    #ports:
+    #  - "8082:8082"
+   # depends_on:
+      #- redis
+     # - redisinsight
+    #  - keycloak
+   #   - postgres
+  #  networks:
+ #     - backend
 
 # Keycloak service and its PostgreSQL database
   postgres-service:
@@ -91,8 +90,8 @@ services:
       KC_DB_URL: jdbc:postgresql://postgres-service:5432/keycloak
       KC_DB_USERNAME: keycloak
       KC_DB_PASSWORD: k1234
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
     command:
       - start-dev
     restart: always

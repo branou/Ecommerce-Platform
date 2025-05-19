@@ -2,7 +2,7 @@ package dev.himbra.ecommercebackend.service;
 
 import dev.himbra.ecommercebackend.dto.PageResponse;
 import dev.himbra.ecommercebackend.dto.ProductResponse;
-import dev.himbra.ecommercebackend.mappers.ProductMapper;
+import dev.himbra.ecommercebackend.mapper.ProductMapper;
 import dev.himbra.ecommercebackend.model.Product;
 import dev.himbra.ecommercebackend.model.User;
 import dev.himbra.ecommercebackend.repository.UserRepository;

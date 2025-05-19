@@ -1,14 +1,15 @@
 package dev.himbra.ecommercebackend.dto;
 
+import lombok.Builder;
+
 import java.math.BigDecimal;
 import java.util.List;
-
+@Builder
 public record ProductResponse(
         Long id,
         String name,
         String description,
         BigDecimal price,
-        BigDecimal discountedPrice,
         Integer stockQuantity,
         Boolean inStock,
         Boolean isPromoted,

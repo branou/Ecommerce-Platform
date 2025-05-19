@@ -6,18 +6,23 @@ import dev.himbra.ecommercebackend.dto.ProductResponse;
 import dev.himbra.ecommercebackend.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
-    @PostMapping("/addProduct")
-    public ResponseEntity<ProductResponse> addProduct( @Valid @RequestBody ProductRequest product) {
+    @PostMapping(value = "/addProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProductResponse> addProduct( @Valid @RequestPart("product") ProductRequest product,       // JSON part for product data
+                                                       @RequestPart("images") List<MultipartFile> images) {
         // Logic to add a product
-        return ResponseEntity.ok(productService.addProduct(product));
+        return ResponseEntity.ok(productService.addProduct(product,images));
     }
     @PutMapping("/updateProduct/{productId}")
     public ResponseEntity<ProductResponse> updateProduct(@Valid @RequestBody ProductRequest productRequest, @PathVariable Long productId){

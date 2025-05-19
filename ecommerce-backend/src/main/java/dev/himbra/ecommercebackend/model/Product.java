@@ -8,11 +8,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "products")
-@Getter @Setter @AllArgsConstructor @NoArgsConstructor
+@Getter @Setter @AllArgsConstructor @NoArgsConstructor @Builder
 public class Product extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
     private String name;
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -43,7 +41,7 @@ public class Product extends BaseEntity {
     @ManyToMany(mappedBy = "product")
     private List<Wishlist> wishlists;
 
-    @Transient
+   @Transient
     public BigDecimal getDiscountedPrice() {
         if (discountPercent != null && discountPercent > 0) {
             return price.subtract(price.multiply(BigDecimal.valueOf(discountPercent)).divide(BigDecimal.valueOf(100)));

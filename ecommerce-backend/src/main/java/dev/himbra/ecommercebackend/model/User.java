@@ -8,7 +8,7 @@ import java.util.List;
 @Entity(name = "users")
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @Builder
-public class User extends BaseEntity {
+public class User {
 
     @Id
     private String id; // Store Keycloak UUID as the primary key

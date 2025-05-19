@@ -4,3 +4,6 @@
 *.iws
 *.ipr
 .env
+*/target/*
+uploads
+.idea

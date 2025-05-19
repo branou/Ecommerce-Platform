@@ -1,15 +1,12 @@
 package dev.himbra.ecommercebackend.model;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 @Entity
 @Table(name = "categories")
 @Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor @NoArgsConstructor @Builder
 public class Category {
 
     @Id

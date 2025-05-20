@@ -57,6 +57,10 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    env:
+      CLOUDINARY_CLOUD_NAME: ${{ secrets.MY_CLOUD }}
+      CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+      CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
     needs: security-check
     steps:
       - name: Checkout Code

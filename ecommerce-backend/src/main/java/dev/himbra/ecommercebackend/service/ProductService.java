@@ -23,6 +23,9 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final FileStorageService fileStorageService;
+    private final CategoryRepository categoryRepository;
+    private final SubCategoryRepository subCategoryRepository;
+    private final BrandRepository brandRepository;
     // A method that handle Add product operation
     public ProductResponse addProduct(ProductRequest productRequest,List<MultipartFile> images) {
         Product product = productMapper.toProduct(productRequest);
@@ -36,8 +39,27 @@ public class ProductService {
                     image.setProduct(product);
                     return image;
                 }).toList();
-
         product.setImages(imageEntities);
+
+        Category category = categoryRepository.findById(productRequest.categoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+        SubCategory subCategory = subCategoryRepository.findById(productRequest.subCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("SubCategory not found"));
+        Brand brand = brandRepository.findById(productRequest.brandId())
+                .orElseThrow(() -> new EntityNotFoundException("Brand not found"));
+        if (!category.getProducts().contains(product)) {
+            category.getProducts().add(product);
+        }
+        if (!subCategory.getProducts().contains(product)) {
+            subCategory.getProducts().add(product);
+        }
+        if (!category.getSubCategories().contains(subCategory)) {
+            category.getSubCategories().add(subCategory);
+        }
+        subCategory.setCategory(category);
+        if (!brand.getProducts().contains(product)) {
+            brand.getProducts().add(product);
+        }
 
         return productMapper.toProductDTO(
                 productRepository.save(product)
@@ -55,7 +77,6 @@ public class ProductService {
         product.setCategory(productMapped.getCategory());
         product.setSubCategory(productMapped.getSubCategory());
         product.setBrand(productMapped.getBrand());
-        product.setImages(productMapped.getImages());
         product.setStockQuantity(productMapped.getStockQuantity());
         product.setIsPromoted(productMapped.getIsPromoted());
         product.setDiscountPercent(productMapped.getDiscountPercent());

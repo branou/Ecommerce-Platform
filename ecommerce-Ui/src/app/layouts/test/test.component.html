@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern E-commerce Site</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#ff6b6b',
+            secondary: '#ff8e8e',
+          },
+          animation: {
+            'shine': 'shine 3s infinite',
+            'fadeInUp': 'fadeInUp 0.8s forwards',
+            'pulse-slow': 'pulse 3s infinite',
+          },
+          keyframes: {
+            shine: {
+              '100%': { left: '100%' },
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/css">
+    .offer-banner::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: shine 3s infinite;
+    }
+
+    .coupon-box::before {
+      content: "10% OFF";
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: #ff6b6b;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      transform: rotate(15deg);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: #ff6b6b;
+      transition: width 0.3s;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+<div class="offer-banner bg-cyan-400 from-primary to-secondary text-center py-3 font-medium relative overflow-hidden">
+  Special Offer: Free Shipping on all orders above $100
+</div>
+
+<!-- Navigation Bar -->
+<nav class="flex justify-between items-center px-5 py-5 bg-white shadow-md sticky top-0 z-50">
+  <div class="text-2xl font-bold text-gray-800">FASHIONHUB</div>
+
+  <ul class="flex space-x-8">
+    <li class="relative">
+      <a href="#" class="nav-link text-gray-800 font-medium hover:text-primary transition-colors duration-300">Home</a>
+    </li>
+    <li class="relative">
+      <a href="#" class="nav-link text-gray-800 font-medium hover:text-primary transition-colors duration-300">Men</a>
+    </li>
+    <li class="relative">
+      <a href="#" class="nav-link text-gray-800 font-medium hover:text-primary transition-colors duration-300">Women</a>
+    </li>
+    <li class="relative">
+      <a href="#" class="nav-link text-gray-800 font-medium hover:text-primary transition-colors duration-300">Page</a>
+    </li>
+    <li class="relative">
+      <a href="#" class="nav-link text-gray-800 font-medium hover:text-primary transition-colors duration-300">Shop</a>
+    </li>
+    <li class="relative">
+      <a href="#" class="nav-link text-gray-800 font-medium hover:text-primary transition-colors duration-300">Sale</a>
+    </li>
+  </ul>
+
+  <div class="flex items-center space-x-5">
+    <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+      <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">Sign
+        in</a>
+      <span class="h-6 w-px bg-gray-200" aria-hidden="true"></span>
+      <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">Create
+        account</a>
+    </div>
+    <div class="flex gap-3 items-center" >
+      <div class="ml-4 flow-root lg:ml-6">
+        <a href="#" class="group -m-2 flex items-center p-2">
+          <svg class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+               fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+               aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+          <span
+            class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+          <span class="sr-only">items in cart, view bag</span>
+        </a>
+      </div>
+
+      <div (click)="toggleDropdown()"
+           class="h-10 w-10 hover:ring-4 user cursor-pointer relative ring-blue-700/30 rounded-full bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')]">
+
+        <div *ngIf="dropdownOpen"
+             class="drop-down  w-48 overflow-hidden bg-white rounded-md shadow absolute top-12 right-3">
+          <ul>
+            <li class="px-3 py-3 text-sm font-medium flex items-center space-x-2 hover:bg-slate-400">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </span>
+              <span> Setting </span>
+            </li>
+            <li class="px-3  py-3  text-sm font-medium flex items-center space-x-2 hover:bg-slate-400">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+</svg>
+            </span>
+              <span> Wishlist </span>
+            </li>
+            <li class="px-3  py-3 text-sm font-medium flex items-center space-x-2 hover:bg-slate-400">
+            <span>
+         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+</svg>
+            </span>
+              <span> Logout </span>
+            </li>
+
+          </ul>
+        </div>
+      </div></div>
+  </div>
+</nav>
+</body>
+</html>

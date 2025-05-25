@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern E-commerce Site</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#ff6b6b',
+            secondary: '#ff8e8e',
+          },
+          animation: {
+            'shine': 'shine 3s infinite',
+            'fadeInUp': 'fadeInUp 0.8s forwards',
+            'pulse-slow': 'pulse 3s infinite',
+          },
+          keyframes: {
+            shine: {
+              '100%': { left: '100%' },
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/css">
+    .offer-banner::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: shine 3s infinite;
+    }
+
+    .coupon-box::before {
+      content: "10% OFF";
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: #ff6b6b;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      transform: rotate(15deg);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: #ff6b6b;
+      transition: width 0.3s;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+<div class="offer-banner bg-blue-950 from-primary text-white to-secondary text-center py-1 font-medium relative overflow-hidden">
+  Livraison gratuite pour toute commande sur Casablanca
+</div>
+<!-- Navigation Bar -->
+<nav class="flex justify-between items-center px-5 py-5 bg-white shadow-md sticky top-0 z-50">
+  <div class="text-2xl font-bold text-gray-800">FASHIONHUB</div>
+  <!-- Middle: Search -->
+  <div class="hidden md:flex items-center w-full max-w-xl mx-4">
+    <div class="relative w-full">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="search()"
+        placeholder="Rechercher"
+        class="w-full border border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-primary/30"
+      />
+      <button
+        (click)="search()"
+        class="absolute right-1 top-1 bottom-1 bg-gray-100 rounded-full px-3"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="flex items-center space-x-5">
+    <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+      <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">Sign
+        in</a>
+      <span class="h-6 w-px bg-gray-200" aria-hidden="true"></span>
+      <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">Create
+        account</a>
+    </div>
+    <div class="flex gap-3 items-center" >
+      <div class="ml-4 flow-root lg:ml-6">
+        <a href="#" class="group -m-2 flex items-center p-2">
+          <svg class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+               fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+               aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+          <span
+            class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+          <span class="sr-only">items in cart, view bag</span>
+        </a>
+      </div>
+
+      <div (click)="toggleDropdown()"
+           class="h-10 w-10 hover:ring-4 user cursor-pointer relative ring-blue-700/30 rounded-full bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')]">
+
+        <div *ngIf="dropdownOpen"
+             class="drop-down  w-48 overflow-hidden bg-white rounded-md shadow absolute top-12 right-3">
+          <ul>
+            <li class="px-3 py-3 text-sm font-medium flex items-center space-x-2 hover:bg-slate-400">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </span>
+              <span> Setting </span>
+            </li>
+            <li class="px-3  py-3  text-sm font-medium flex items-center space-x-2 hover:bg-slate-400">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+</svg>
+            </span>
+              <span> Wishlist </span>
+            </li>
+            <li class="px-3  py-3 text-sm font-medium flex items-center space-x-2 hover:bg-slate-400">
+            <span>
+         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+</svg>
+            </span>
+              <span> Logout </span>
+            </li>
+
+          </ul>
+        </div>
+      </div></div>
+  </div>
+</nav>
+<!----------------------------------------------------------------------------->
+<!----------------------------------------------------------------------------->
+<!-- Navigation Bar -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+      <div class="flex items-center justify-between">
+        <!-- Right: Contact & Account -->
+        <div class="flex items-center space-x-4">
+          <!-- Mobile Menu Toggle -->
+          <button
+            (click)="toggleMenu()"
+            class="md:hidden p-1 rounded-md text-primary focus:outline-none"
+            aria-expanded="false"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Search (only visible on mobile) -->
+      <div class="mt-4 md:hidden">
+        <div class="relative">
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="search()"
+            placeholder="Rechercher"
+            class="w-full border border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-primary/30"
+          />
+          <button
+            (click)="search()"
+            class="absolute right-1 top-1 bottom-1 bg-gray-100 rounded-full px-3"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white border-t border-b border-gray-200 flex justify-center items-center">
+      <div class="container-custom">
+        <!-- Desktop Navigation -->
+        <ul class="hidden md:flex items-center space-x-8 py-2 font-medium uppercase text-sm">
+          <li>
+            <a
+              routerLink="/"
+              routerLinkActive="text-primary"
+              [routerLinkActiveOptions]="{exact: true}"
+              class="block py-2 hover:text-primary"
+            >
+              Accueil
+            </a>
+          </li>
+          <li>
+            <a
+              (mouseenter)="openMegaMenu('visage')"
+              class="block py-2 hover:text-primary cursor-pointer"
+            >
+              Visage
+            </a>
+          </li>
+          <li>
+            <a
+              (mouseenter)="openMegaMenu('maquillage')"
+              class="block py-2 hover:text-primary cursor-pointer"
+            >
+              Maquillage
+            </a>
+          </li>
+          <li>
+            <a
+              (mouseenter)="openMegaMenu('corps')"
+              class="block py-2 hover:text-primary cursor-pointer"
+            >
+              Corps
+            </a>
+          </li>
+          <li>
+            <a
+              (mouseenter)="openMegaMenu('cheveux')"
+              class="block py-2 hover:text-primary cursor-pointer"
+            >
+              Cheveux
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/category/bebe"
+              routerLinkActive="text-primary"
+              class="block py-2 hover:text-primary"
+            >
+              Bébé & Maman
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/category/homme"
+              routerLinkActive="text-primary"
+              class="block py-2 hover:text-primary"
+            >
+              Homme
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/category/hygiene"
+              routerLinkActive="text-primary"
+              class="block py-2 hover:text-primary"
+            >
+              Hygiène
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/category/solaire"
+              routerLinkActive="text-primary"
+              class="block py-2 hover:text-primary"
+            >
+              Solaire
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/category/bio"
+              routerLinkActive="text-primary"
+              class="block py-2 hover:text-primary"
+            >
+              Bio
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/category/promotion"
+              routerLinkActive="text-primary"
+              class="block py-2 text-secondary hover:text-secondary-dark"
+            >
+              Promotion
+            </a>
+          </li>
+        </ul>
+
+        <!-- Mobile Navigation (Dropdown) -->
+        <div class="md:hidden">
+          <div
+            *ngIf="isMenuOpen"
+            class="fixed inset-0 z-50 bg-black bg-opacity-25"
+            (click)="toggleMenu()"
+          ></div>
+
+          <div
+            *ngIf="isMenuOpen"
+            class="fixed top-0 left-0 z-50 w-64 h-full bg-white shadow-lg transform transition-transform ease-in-out duration-300"
+            [class.translate-x-0]="isMenuOpen"
+            [class.-translate-x-full]="!isMenuOpen"
+          >
+            <div class="p-4 border-b flex justify-between items-center">
+              <img src="assets/images/logo.png" alt="Parapharma" class="h-8" />
+              <button
+                (click)="toggleMenu()"
+                class="p-1 rounded-md text-gray-500 hover:text-primary focus:outline-none"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <ul class="divide-y">
+              <li>
+                <a routerLink="/" class="block px-4 py-3 hover:bg-gray-50" (click)="toggleMenu()">
+                  Accueil
+                </a>
+              </li>
+              <li>
+                <a routerLink="/category/visage" class="block px-4 py-3 hover:bg-gray-50" (click)="toggleMenu()">
+                  Visage
+                </a>
+              </li>
+              <li>
+                <a routerLink="/category/maquillage" class="block px-4 py-3 hover:bg-gray-50" (click)="toggleMenu()">
+                  Maquillage
+                </a>
+              </li>
+              <li>
+                <a routerLink="/category/corps" class="block px-4 py-3 hover:bg-gray-50" (click)="toggleMenu()">
+                  Corps
+                </a>
+              </li>
+              <li>
+                <a routerLink="/category/cheveux" class="block px-4 py-3 hover:bg-gray-50" (click)="toggleMenu()">
+                  Cheveux
+                </a>
+              </li>
+              <li>
+                <a routerLink="/category/bebe" class="block px-4 py-3 hover:bg-gray-50" (click)="toggleMenu()">
+                  Bébé & Maman
+                </a>
+              </li>
+              <li>
+                <a routerLink="/category/homme" class="block px-4 py-3 hover:bg-gray-50" (click)="toggleMenu()">
+                  Homme
+                </a>
+              </li>
+              <li>
+                <a routerLink="/category/hygiene" class="block px-4 py-3 hover:bg-gray-50" (click)="toggleMenu()">
+                  Hygiène
+                </a>
+              </li>
+              <li>
+                <a routerLink="/category/solaire" class="block px-4 py-3 hover:bg-gray-50" (click)="toggleMenu()">
+                  Solaire
+                </a>
+              </li>
+              <li>
+                <a routerLink="/category/bio" class="block px-4 py-3 hover:bg-gray-50" (click)="toggleMenu()">
+                  Bio
+                </a>
+              </li>
+              <li>
+                <a routerLink="/category/promotion" class="block px-4 py-3 text-secondary hover:bg-gray-50" (click)="toggleMenu()">
+                  Promotion
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MegaMenu (Desktop Only) -->
+    <div
+      *ngIf="isMegaMenuOpen"
+      class="hidden md:block absolute w-full bg-white border-b border-gray-200 shadow-lg z-50"
+      (mouseleave)="closeMegaMenu()"
+    >
+      <div class="container-custom py-6 flex justify-center items-center ">
+        <!-- Visage MegaMenu -->
+        <div *ngIf="activeMegaMenu === 'visage'" class="grid grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Éclat du teint</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/visage/accessoires" class="hover:text-primary" (click)="closeMegaMenu()">Accessoires</a></li>
+              <li><a routerLink="/category/visage/bb-creme" class="hover:text-primary" (click)="closeMegaMenu()">BB crème</a></li>
+              <li><a routerLink="/category/visage/cc-cremes" class="hover:text-primary" (click)="closeMegaMenu()">CC Crèmes</a></li>
+              <li><a routerLink="/category/visage/cremes-teintees" class="hover:text-primary" (click)="closeMegaMenu()">Crèmes Teintées</a></li>
+              <li><a routerLink="/category/visage/dd-creme" class="hover:text-primary" (click)="closeMegaMenu()">DD crème</a></li>
+              <li><a routerLink="/category/visage/fond-de-teint" class="hover:text-primary" (click)="closeMegaMenu()">Fond de Teint</a></li>
+              <li><a routerLink="/category/visage/illuminateurs-de-teint" class="hover:text-primary" (click)="closeMegaMenu()">Illuminateurs de teint</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Yeux & Lèvres</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/visage/anti-cernes-poches" class="hover:text-primary" (click)="closeMegaMenu()">Anti-cernes & poches</a></li>
+              <li><a routerLink="/category/visage/cils-sourcils" class="hover:text-primary" (click)="closeMegaMenu()">Cils & Sourcils</a></li>
+              <li><a routerLink="/category/visage/contour-des-yeux-et-levres" class="hover:text-primary" (click)="closeMegaMenu()">Contour des yeux et lèvres</a></li>
+              <li><a routerLink="/category/visage/demaquillants" class="hover:text-primary" (click)="closeMegaMenu()">Démaquillants</a></li>
+              <li><a routerLink="/category/visage/hydratants" class="hover:text-primary" (click)="closeMegaMenu()">Hydratants</a></li>
+              <li><a routerLink="/category/visage/masques-et-patchs" class="hover:text-primary" (click)="closeMegaMenu()">Masques et Patchs</a></li>
+              <li><a routerLink="/category/visage/solaires" class="hover:text-primary" (click)="closeMegaMenu()">Solaires</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Soins Anti-âge</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/visage/anti-rides-fermete" class="hover:text-primary" (click)="closeMegaMenu()">Anti-rides & Fermeté</a></li>
+              <li><a routerLink="/category/visage/masque" class="hover:text-primary" (click)="closeMegaMenu()">Masque</a></li>
+              <li><a routerLink="/category/visage/premieres-rides" class="hover:text-primary" (click)="closeMegaMenu()">Premières rides</a></li>
+              <li><a routerLink="/category/visage/serum" class="hover:text-primary" (click)="closeMegaMenu()">Sérum</a></li>
+              <li><a routerLink="/category/visage/soins-anti-age" class="hover:text-primary" (click)="closeMegaMenu()">Soins anti-âge</a></li>
+              <li><a routerLink="/category/visage/taches-liees-a-l-age" class="hover:text-primary" (click)="closeMegaMenu()">Taches liées à l'âge</a></li>
+              <li><a routerLink="/category/visage/yeux-levres-cou" class="hover:text-primary" (click)="closeMegaMenu()">Yeux, Lèvres & Cou</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Acné & Imperfections</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/visage/cremes-et-soins-traitants" class="hover:text-primary" (click)="closeMegaMenu()">Crèmes et Soins Traitants</a></li>
+              <li><a routerLink="/category/visage/gommages-masques" class="hover:text-primary" (click)="closeMegaMenu()">Gommages & Masques</a></li>
+              <li><a routerLink="/category/visage/hydratants-traitants" class="hover:text-primary" (click)="closeMegaMenu()">Hydratants & Traitants</a></li>
+              <li><a routerLink="/category/visage/lotions-toniques" class="hover:text-primary" (click)="closeMegaMenu()">Lotions & Toniques</a></li>
+              <li><a routerLink="/category/visage/masques-et-exfoliants" class="hover:text-primary" (click)="closeMegaMenu()">Masques et Exfoliants</a></li>
+              <li><a routerLink="/category/visage/nettoyants-demaquillants" class="hover:text-primary" (click)="closeMegaMenu()">Nettoyants & Démaquillants</a></li>
+              <li><a routerLink="/category/visage/solaires-acne" class="hover:text-primary" (click)="closeMegaMenu()">Solaires</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Maquillage MegaMenu -->
+        <div *ngIf="activeMegaMenu === 'maquillage'" class="grid grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Démaquillants</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/maquillage/coton" class="hover:text-primary" (click)="closeMegaMenu()">Coton</a></li>
+              <li><a routerLink="/category/maquillage/demaquillants-yeux" class="hover:text-primary" (click)="closeMegaMenu()">Démaquillants Yeux</a></li>
+              <li><a routerLink="/category/maquillage/eau-lotions" class="hover:text-primary" (click)="closeMegaMenu()">Eau & Lotions</a></li>
+              <li><a routerLink="/category/maquillage/eponge-et-brosses" class="hover:text-primary" (click)="closeMegaMenu()">Eponge et brosses</a></li>
+              <li><a routerLink="/category/maquillage/gel-creme" class="hover:text-primary" (click)="closeMegaMenu()">Gel & Crème</a></li>
+              <li><a routerLink="/category/maquillage/huile-mousse" class="hover:text-primary" (click)="closeMegaMenu()">Huile & Mousse</a></li>
+              <li><a routerLink="/category/maquillage/lait-pains" class="hover:text-primary" (click)="closeMegaMenu()">Lait & Pains</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Visage</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/maquillage/anticernes" class="hover:text-primary" (click)="closeMegaMenu()">Anticernes</a></li>
+              <li><a routerLink="/category/maquillage/base-et-fixation" class="hover:text-primary" (click)="closeMegaMenu()">Base et fixation</a></li>
+              <li><a routerLink="/category/maquillage/bb-et-cc-creme" class="hover:text-primary" (click)="closeMegaMenu()">BB et cc crème</a></li>
+              <li><a routerLink="/category/maquillage/fard-a-joues" class="hover:text-primary" (click)="closeMegaMenu()">Fard à joues</a></li>
+              <li><a routerLink="/category/maquillage/fond-de-teint" class="hover:text-primary" (click)="closeMegaMenu()">Fond de teint</a></li>
+              <li><a routerLink="/category/maquillage/highlighter" class="hover:text-primary" (click)="closeMegaMenu()">Highlighter</a></li>
+              <li><a routerLink="/category/maquillage/poudre-et-bronzer" class="hover:text-primary" (click)="closeMegaMenu()">Poudre et bronzer</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Yeux</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/maquillage/base-a-paupieres" class="hover:text-primary" (click)="closeMegaMenu()">Base à paupières</a></li>
+              <li><a routerLink="/category/maquillage/crayon-et-kohl" class="hover:text-primary" (click)="closeMegaMenu()">Crayon et Kohl</a></li>
+              <li><a routerLink="/category/maquillage/eyeliner" class="hover:text-primary" (click)="closeMegaMenu()">Eyeliner</a></li>
+              <li><a routerLink="/category/maquillage/mascara" class="hover:text-primary" (click)="closeMegaMenu()">Mascara</a></li>
+              <li><a routerLink="/category/maquillage/ombre-a-paupieres" class="hover:text-primary" (click)="closeMegaMenu()">Ombre à paupières</a></li>
+              <li><a routerLink="/category/maquillage/palettes-paupieres" class="hover:text-primary" (click)="closeMegaMenu()">Palettes paupières</a></li>
+              <li><a routerLink="/category/maquillage/sourcils" class="hover:text-primary" (click)="closeMegaMenu()">Sourcils</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Lèvres</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/maquillage/baume-a-levres" class="hover:text-primary" (click)="closeMegaMenu()">Baume à lèvres</a></li>
+              <li><a routerLink="/category/maquillage/crayon-levres" class="hover:text-primary" (click)="closeMegaMenu()">Crayon lèvres</a></li>
+              <li><a routerLink="/category/maquillage/gloss" class="hover:text-primary" (click)="closeMegaMenu()">Gloss</a></li>
+              <li><a routerLink="/category/maquillage/levres-classic" class="hover:text-primary" (click)="closeMegaMenu()">Lèvres classic</a></li>
+              <li><a routerLink="/category/maquillage/levres-liquide" class="hover:text-primary" (click)="closeMegaMenu()">Lèvres liquide</a></li>
+              <li><a routerLink="/category/maquillage/levres-matt" class="hover:text-primary" (click)="closeMegaMenu()">Lèvres matt</a></li>
+              <li><a routerLink="/category/maquillage/soins-levres" class="hover:text-primary" (click)="closeMegaMenu()">Soins lèvres</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Corps MegaMenu -->
+        <div *ngIf="activeMegaMenu === 'corps'" class="grid grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Soins corps</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/corps/anti-irritations" class="hover:text-primary" (click)="closeMegaMenu()">Anti-irritations</a></li>
+              <li><a routerLink="/category/corps/anti-moustiques" class="hover:text-primary" (click)="closeMegaMenu()">Anti-moustiques</a></li>
+              <li><a routerLink="/category/corps/cicatrisants" class="hover:text-primary" (click)="closeMegaMenu()">Cicatrisants</a></li>
+              <li><a routerLink="/category/corps/eclaircissants" class="hover:text-primary" (click)="closeMegaMenu()">Eclaircissants</a></li>
+              <li><a routerLink="/category/corps/gommage" class="hover:text-primary" (click)="closeMegaMenu()">Gommage</a></li>
+              <li><a routerLink="/category/corps/huiles" class="hover:text-primary" (click)="closeMegaMenu()">Huiles</a></li>
+              <li><a routerLink="/category/corps/hydratant" class="hover:text-primary" (click)="closeMegaMenu()">Hydratant</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Solaire</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/corps/apres-soleil" class="hover:text-primary" (click)="closeMegaMenu()">Après-Soleil</a></li>
+              <li><a routerLink="/category/corps/bronzants" class="hover:text-primary" (click)="closeMegaMenu()">Bronzants</a></li>
+              <li><a routerLink="/category/corps/brume" class="hover:text-primary" (click)="closeMegaMenu()">Brume</a></li>
+              <li><a routerLink="/category/corps/cremes" class="hover:text-primary" (click)="closeMegaMenu()">Crèmes</a></li>
+              <li><a routerLink="/category/corps/enfant" class="hover:text-primary" (click)="closeMegaMenu()">Enfant</a></li>
+              <li><a routerLink="/category/corps/huile" class="hover:text-primary" (click)="closeMegaMenu()">Huile</a></li>
+              <li><a routerLink="/category/corps/laits" class="hover:text-primary" (click)="closeMegaMenu()">Laits</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Minceur</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/corps/bruleur-de-graisse" class="hover:text-primary" (click)="closeMegaMenu()">Brûleur de graisse</a></li>
+              <li><a routerLink="/category/corps/cellulite" class="hover:text-primary" (click)="closeMegaMenu()">Cellulite</a></li>
+              <li><a routerLink="/category/corps/drainage" class="hover:text-primary" (click)="closeMegaMenu()">Drainage</a></li>
+              <li><a routerLink="/category/corps/patch-et-cremes" class="hover:text-primary" (click)="closeMegaMenu()">Patch et crèmes</a></li>
+              <li><a routerLink="/category/corps/regime-et-coupe-faim" class="hover:text-primary" (click)="closeMegaMenu()">Régime et Coupe faim</a></li>
+              <li><a routerLink="/category/corps/textile" class="hover:text-primary" (click)="closeMegaMenu()">Textile</a></li>
+              <li><a routerLink="/category/corps/ventre-plat" class="hover:text-primary" (click)="closeMegaMenu()">Ventre plat</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Epilation</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/corps/cires" class="hover:text-primary" (click)="closeMegaMenu()">Cires</a></li>
+              <li><a routerLink="/category/corps/creme-d-epilatoire" class="hover:text-primary" (click)="closeMegaMenu()">Crème d'épilatoire</a></li>
+              <li><a routerLink="/category/corps/decoloration" class="hover:text-primary" (click)="closeMegaMenu()">Décoloration</a></li>
+              <li><a routerLink="/category/corps/pinces-a-epiler" class="hover:text-primary" (click)="closeMegaMenu()">Pinces à Epiler</a></li>
+              <li><a routerLink="/category/corps/rasage" class="hover:text-primary" (click)="closeMegaMenu()">Rasage</a></li>
+              <li><a routerLink="/category/corps/soin-post-epilatoire" class="hover:text-primary" (click)="closeMegaMenu()">Soin post épilatoire</a></li>
+              <li><a routerLink="/category/corps/tondeuses-et-epilateurs" class="hover:text-primary" (click)="closeMegaMenu()">Tondeuses et épilateurs</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Cheveux MegaMenu -->
+        <div *ngIf="activeMegaMenu === 'cheveux'" class="grid grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Shampooings</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/cheveux/2en1" class="hover:text-primary" (click)="closeMegaMenu()">2en1</a></li>
+              <li><a routerLink="/category/cheveux/anti-chute" class="hover:text-primary" (click)="closeMegaMenu()">Anti-chute</a></li>
+              <li><a routerLink="/category/cheveux/anti-pelliculaire" class="hover:text-primary" (click)="closeMegaMenu()">Anti-pelliculaire</a></li>
+              <li><a routerLink="/category/cheveux/cheveux-boucles-et-crepus" class="hover:text-primary" (click)="closeMegaMenu()">Cheveux Bouclés et Crépus</a></li>
+              <li><a routerLink="/category/cheveux/cheveux-colores-et-blancs" class="hover:text-primary" (click)="closeMegaMenu()">Cheveux Colorés et Blancs</a></li>
+              <li><a routerLink="/category/cheveux/cheveux-fins" class="hover:text-primary" (click)="closeMegaMenu()">Cheveux fins</a></li>
+              <li><a routerLink="/category/cheveux/cheveux-gras" class="hover:text-primary" (click)="closeMegaMenu()">Cheveux Gras</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Soins cheveux</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/cheveux/anti-chute-soins" class="hover:text-primary" (click)="closeMegaMenu()">Anti-chute</a></li>
+              <li><a routerLink="/category/cheveux/apres-shampooing" class="hover:text-primary" (click)="closeMegaMenu()">Après-shampooing</a></li>
+              <li><a routerLink="/category/cheveux/baume" class="hover:text-primary" (click)="closeMegaMenu()">Baume</a></li>
+              <li><a routerLink="/category/cheveux/cheveux-abimes" class="hover:text-primary" (click)="closeMegaMenu()">Cheveux abîmés</a></li>
+              <li><a routerLink="/category/cheveux/huiles" class="hover:text-primary" (click)="closeMegaMenu()">Huiles</a></li>
+              <li><a routerLink="/category/cheveux/masque" class="hover:text-primary" (click)="closeMegaMenu()">Masque</a></li>
+              <li><a routerLink="/category/cheveux/serum" class="hover:text-primary" (click)="closeMegaMenu()">Sérum</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Coiffants</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/cheveux/cire" class="hover:text-primary" (click)="closeMegaMenu()">Cire</a></li>
+              <li><a routerLink="/category/cheveux/gel" class="hover:text-primary" (click)="closeMegaMenu()">Gel</a></li>
+              <li><a routerLink="/category/cheveux/laques" class="hover:text-primary" (click)="closeMegaMenu()">Laques</a></li>
+              <li><a routerLink="/category/cheveux/mousses" class="hover:text-primary" (click)="closeMegaMenu()">Mousses</a></li>
+              <li><a routerLink="/category/cheveux/poudre" class="hover:text-primary" (click)="closeMegaMenu()">Poudre</a></li>
+              <li><a routerLink="/category/cheveux/spray" class="hover:text-primary" (click)="closeMegaMenu()">Spray</a></li>
+              <li><a routerLink="/category/cheveux/volumateurs" class="hover:text-primary" (click)="closeMegaMenu()">Volumateurs</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-primary font-bold uppercase mb-4">Coloration</h3>
+            <ul class="space-y-2">
+              <li><a routerLink="/category/cheveux/coloration-homme" class="hover:text-primary" (click)="closeMegaMenu()">Coloration homme</a></li>
+              <li><a routerLink="/category/cheveux/coloration-permanente" class="hover:text-primary" (click)="closeMegaMenu()">Coloration permanente</a></li>
+              <li><a routerLink="/category/cheveux/coloration-ton-sur-ton" class="hover:text-primary" (click)="closeMegaMenu()">Coloration ton sur ton</a></li>
+              <li><a routerLink="/category/cheveux/henné" class="hover:text-primary" (click)="closeMegaMenu()">Henné</a></li>
+              <li><a routerLink="/category/cheveux/kit-coloration" class="hover:text-primary" (click)="closeMegaMenu()">Kit coloration</a></li>
+              <li><a routerLink="/category/cheveux/shampooings-colorants" class="hover:text-primary" (click)="closeMegaMenu()">Shampooings colorants</a></li>
+              <li><a routerLink="/category/cheveux/soins-apres-coloration" class="hover:text-primary" (click)="closeMegaMenu()">Soins après coloration</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+</body>
+</html>

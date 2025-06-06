@@ -41,6 +41,7 @@ public class Product extends BaseEntity {
     @ManyToMany(mappedBy = "product")
     private List<Wishlist> wishlists;
 
+
    @Transient
     public BigDecimal getDiscountedPrice() {
         if (discountPercent != null && discountPercent > 0) {

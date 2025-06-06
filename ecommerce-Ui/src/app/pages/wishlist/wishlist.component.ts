@@ -1,24 +1,15 @@
 import { Component } from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {Product} from '../../../core/interfaces/Order';
 import {CommonModule} from '@angular/common';
 
 @Component({
-  selector: 'app-all-products',
-  imports: [FormsModule, CommonModule],
-  templateUrl: './all-products.component.html',
-  styleUrl: './all-products.component.scss',
+  selector: 'app-wishlist',
+  imports: [CommonModule],
+  templateUrl: './wishlist.component.html',
+  styleUrl: './wishlist.component.scss',
   standalone: true
 })
-export class AllProductsComponent {
-  price: number = 500;
-  min: number = 0;
-  max: number = 1000;
-
-  get formattedPrice(): string {
-    return `${this.price} DHS`;
-  }
-  products : Product[] = [
+export class WishlistComponent {
+  products = [
     {
       id: 1,
       name: 'EVAWIN ROSAWIN® GEL NETTOYANT MDZ',
@@ -51,21 +42,9 @@ export class AllProductsComponent {
       stock: true,
       imageUrl: 'https://parapharma.ma/7663-medium_default/beliflor-shampooing-antipelliculaire-250ml.webp',
     },
-    {
-      id: 5,
-      name: 'VICHY DEODORANT MINERAL MGO',
-      description: '125 ml',
-      price: 119,
-      stock: true,
-      imageUrl: 'https://parapharma.ma/48295-medium_default/vichy-deodorant-mineral-mgo-125ml-.webp',
-    },
-    {
-      id: 6,
-      name: 'SVR SUN SECURE LAIT BIODEGRADABLE SPF 50+',
-      description: '250 ml',
-      price: 289,
-      stock: true,
-      imageUrl: 'https://parapharma.ma/36258-medium_default/svr-sun-secure-lait-biodegradable-spf-50-200ml.webp',
-    }
   ];
+  removeProduct(product: any) {
+    this.products = this.products.filter(p => p !== product);
+  }
+
 }

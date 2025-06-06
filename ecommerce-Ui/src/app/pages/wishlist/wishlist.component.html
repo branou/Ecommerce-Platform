@@ -1,0 +1,75 @@
+<div class="p-6 bg-gray-50 min-h-screen mt-5">
+  <h2 class="text-3xl font-bold mb-2">Vos articles favoris</h2>
+  <p class="text-gray-600 mb-6">Il y a {{ products.length | number: '2.0' }} produits dans cette liste</p>
+
+  <!-- Conteneur de la table -->
+  <div class="bg-white rounded-2xl shadow border border-gray-200 overflow-hidden">
+    <!-- En-tête -->
+    <div class="grid grid-cols-12 px-6 py-4 border-b border-gray-200 font-semibold text-gray-600">
+      <div class="col-span-4">Produit</div>
+      <div class="col-span-2">Prix</div>
+      <div class="col-span-2">État du stock</div>
+      <div class="col-span-2">Action</div>
+      <div class="col-span-2 text-center">Supprimer</div>
+    </div>
+
+    <!-- Lignes des produits -->
+    <ng-container *ngFor="let product of products; let last = last">
+      <div
+        class="grid grid-cols-12 items-center px-6 py-4"
+        [ngClass]="{ 'border-b border-gray-200': !last, 'rounded-b-2xl': last }"
+      >
+        <!-- Informations du produit -->
+        <div class="col-span-4 flex items-center space-x-4">
+          <img [src]="product.imageUrl" alt="Image du produit" class="w-12 h-12 rounded-md object-cover" />
+          <div>
+            <div class="font-bold text-gray-900">{{ product.name }}</div>
+            <div class="text-sm text-gray-500">{{ product.description }}</div>
+          </div>
+        </div>
+
+        <!-- Prix -->
+        <div class="col-span-2 font-semibold text-gray-800">
+          {{ product.price.toFixed(2) }} DH
+        </div>
+
+        <!-- Stock -->
+        <div class="col-span-2">
+          <span
+            class="px-3 py-1 rounded-full text-sm font-medium"
+            [ngClass]="product.stock ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500'"
+          >
+            {{ product.stock ? 'En stock' : 'Rupture de stock' }}
+          </span>
+        </div>
+
+        <!-- Action -->
+        <div class="col-span-2">
+          <button
+            *ngIf="product.stock; else contactBtn"
+            class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-md"
+          >
+            Ajouter au panier
+          </button>
+          <ng-template #contactBtn>
+            <button class="bg-gray-900 text-white text-sm px-4 py-2 rounded-md">
+              Contactez-nous
+            </button>
+          </ng-template>
+        </div>
+
+
+        <!-- Supprimer -->
+        <div class="col-span-2 text-center">
+          <button class="text-gray-500 hover:text-red-500" (click)="removeProduct(product)">
+            <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3H4m16 0H4" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

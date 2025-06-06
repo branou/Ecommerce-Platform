@@ -1,8 +1,8 @@
 <!-- login.component.html -->
 <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4 shadow-4xl p-8 space-y-8 transition-all duration-500 hover:shadow-xl">
   <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-    <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">Brand</h2>
-    <p class="text-center text-gray-500 mb-6">Welcome back!</p>
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">ParaSoins</h2>
+    <p class="text-center text-gray-500 mb-6">Bienvenue à nouveau!</p>
 
     <!-- Google Sign-in Button (static for now) -->
     <button type="button"
@@ -21,12 +21,12 @@
           d="M36.3425 16.7358H35V16.6667H20V23.3333H29.4192C28.7592 25.1975 27.56 26.805 26.0133 27.9758C26.0142 27.975 26.015 27.975 26.0158 27.9742L31.1742 32.3392C30.8092 32.6708 36.6667 28.3333 36.6667 20C36.6667 18.8825 36.5517 17.7917 36.3425 16.7358Z"
           fill="#1976D2" />
       </svg>
-      <span class="px-2 py-3 w-5/6 text-center text-gray-600 font-bold">Sign in with Google</span>
+      <span class="px-2 py-3 w-5/6 text-center text-gray-600 font-bold">Se connecter avec Google</span>
     </button>
     <!-- Divider -->
     <div class="flex items-center mb-6">
       <hr class="flex-grow border-gray-300" />
-      <span class="mx-2 text-xs text-gray-500 uppercase">or login with email</span>
+      <span class="mx-2 text-xs text-gray-500 uppercase">ou connexion par e-mail</span>
       <hr class="flex-grow border-gray-300" />
     </div>
 
@@ -43,14 +43,14 @@
           [(ngModel)]="formData.email"
           #email="ngModel"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300" />
-        <div *ngIf="email.invalid && email.touched" class="text-red-500 text-sm mt-1">Email is required.</div>
+        <div *ngIf="email.invalid && email.touched" class="text-red-500 text-sm mt-1">Email est obligatoire.</div>
       </div>
 
       <!-- Password -->
       <div class="mb-4">
         <div class="flex justify-between items-center">
-          <label for="password" class="block text-sm font-semibold text-gray-700 mb-1">Password</label>
-          <a href="#" class="text-xs text-gray-500 hover:underline">Forgot Password?</a>
+          <label for="password" class="block text-sm font-semibold text-gray-700 mb-1">Mot de passe</label>
+          <a href="#" class="text-xs text-gray-500 hover:underline">Mot de passe oublié?</a>
         </div>
         <input
           id="password"
@@ -60,7 +60,7 @@
           [(ngModel)]="formData.password"
           #password="ngModel"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300" />
-        <div *ngIf="password.invalid && password.touched" class="text-red-500 text-sm mt-1">Password is required.</div>
+        <div *ngIf="password.invalid && password.touched" class="text-red-500 text-sm mt-1">Password est obligatoire.</div>
       </div>
 
       <!-- Submit -->
@@ -68,14 +68,14 @@
         type="submit"
         [disabled]="loginForm.invalid"
         class="w-full bg-gray-800 text-white py-2 rounded-lg font-semibold hover:bg-gray-700 transition">
-        Login
+        Connexion
       </button>
     </form>
 
     <!-- Sign Up -->
     <p class="text-center text-sm text-gray-500 mt-6">
-      Don't have an account?
-      <a href="#" class="text-gray-700 font-semibold hover:underline">Sign up</a>
+      Vous n'avez pas de compte?
+      <a href="#" class="text-gray-700 font-semibold hover:underline">Inscrivez-vous</a>
     </p>
   </div>
 </div>

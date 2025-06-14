@@ -1,6 +1,7 @@
 package dev.himbra.ecommercebackend.service;
 
 import dev.himbra.ecommercebackend.dto.PageResponse;
+import dev.himbra.ecommercebackend.dto.ProductReq;
 import dev.himbra.ecommercebackend.dto.ProductRequest;
 import dev.himbra.ecommercebackend.dto.ProductResponse;
 import dev.himbra.ecommercebackend.mapper.ProductMapper;
@@ -13,9 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
-
 
 @RequiredArgsConstructor
 @Service
@@ -65,8 +64,38 @@ public class ProductService {
                 productRepository.save(product)
         );
     }
+    // add product quick
+    public ProductResponse addProductQuick(ProductReq productRequest) {
+        Product product = productMapper.toProduct(productRequest);
+                    String imageUrl = productRequest.imageUrl();
+                    Image image = new Image();
+                    image.setUrl(imageUrl);
+                    image.setProduct(product);
+        product.setImages(List.of(image));
+        Category category = categoryRepository.findById(productRequest.categoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+        SubCategory subCategory = subCategoryRepository.findById(productRequest.subCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("SubCategory not found"));
+        Brand brand = brandRepository.findById(productRequest.brandId())
+                .orElseThrow(() -> new EntityNotFoundException("Brand not found"));
+        if (!category.getProducts().contains(product)) {
+            category.getProducts().add(product);
+        }
+        if (!subCategory.getProducts().contains(product)) {
+            subCategory.getProducts().add(product);
+        }
+        if (!category.getSubCategories().contains(subCategory)) {
+            category.getSubCategories().add(subCategory);
+        }
+        subCategory.setCategory(category);
+        if (!brand.getProducts().contains(product)) {
+            brand.getProducts().add(product);
+        }
 
-    // A method that handle Update product operation
+        return productMapper.toProductDTO(
+                productRepository.save(product)
+        );
+    }
     public ProductResponse updateProduct(ProductRequest productRequest, Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));

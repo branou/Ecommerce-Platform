@@ -1,4 +1,5 @@
 package dev.himbra.ecommercebackend.model;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import dev.himbra.ecommercebackend.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,6 +16,7 @@ public class Cart extends BaseEntity {
     @OneToOne // One cart per user
     private User user;
 
+    @JsonManagedReference
     @Builder.Default
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<>();

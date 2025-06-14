@@ -1,6 +1,7 @@
 package dev.himbra.ecommercebackend.mapper;
 
 import dev.himbra.ecommercebackend.dto.CategoryRequest;
+import dev.himbra.ecommercebackend.dto.ProductReq;
 import dev.himbra.ecommercebackend.dto.ProductRequest;
 import dev.himbra.ecommercebackend.dto.ProductResponse;
 import dev.himbra.ecommercebackend.model.Category;
@@ -38,12 +39,21 @@ public class ProductMapper {
                 .brand(productMapperHelper.fetchBrandById(productRequest.brandId()))
                 .build();
     }
+    public Product toProduct(ProductReq productRequest){
+        return Product.builder()
+                .name(productRequest.name())
+                .description(productRequest.description())
+                .price(productRequest.price())
+                .stockQuantity(productRequest.stockQuantity())
+                .category(productMapperHelper.fetchCategoryById(productRequest.categoryId()))
+                .subCategory(productMapperHelper.fetchSubCategoryById(productRequest.subCategoryId()))
+                .brand(productMapperHelper.fetchBrandById(productRequest.brandId()))
+                .build();
+    }
     public Category toCategory(CategoryRequest categoryRequest){
         return Category.builder()
                 .name(categoryRequest.name())
                 .subCategories(productMapperHelper.mapToSubCategoryList(categoryRequest.SubCategoryIds()))
                 .build();
     }
-
-
 }

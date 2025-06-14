@@ -1,5 +1,6 @@
 package dev.himbra.ecommercebackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
@@ -17,6 +18,7 @@ public class Wishlist {
     @OneToOne
     @JoinColumn(name="userId")
     private User user;
+    @JsonBackReference
     @ManyToMany
     @JoinTable(
             name = "wishlist_products",

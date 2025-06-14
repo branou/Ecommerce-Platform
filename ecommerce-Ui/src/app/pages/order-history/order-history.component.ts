@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Order} from '../../core/interfaces/Order';
+import {Order} from '../../core/interfaces/model';
 
 @Component({
   selector: 'app-order-history',

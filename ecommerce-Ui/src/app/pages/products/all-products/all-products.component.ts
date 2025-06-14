@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {Product} from '../../../core/interfaces/Order';
 import {CommonModule} from '@angular/common';
+import {Store} from '@ngrx/store';
+import {getAllProducts} from '../../../core/store/product/product.actions';
+import {selectAllProducts} from '../../../core/store/product/product.selectors';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-all-products',
@@ -10,15 +13,36 @@ import {CommonModule} from '@angular/common';
   styleUrl: './all-products.component.scss',
   standalone: true
 })
-export class AllProductsComponent {
+export class AllProductsComponent implements OnInit{
   price: number = 500;
   min: number = 0;
   max: number = 1000;
+  constructor(private router: Router) {
+  }
+
+  gotoproductdetails(productId: number, event: Event) {
+    event.preventDefault();
+    console.log('Go to details for product:', productId);
+    // Your navigation or logic here
+    this.router.navigate(['/products', productId]);
+  }
 
   get formattedPrice(): string {
     return `${this.price} DHS`;
   }
-  products : Product[] = [
+
+  private store = inject(Store);
+  products$ = this.store.select(selectAllProducts);
+
+  ngOnInit(): void {
+    this.loadProducts()
+  }
+  page: number = 0;
+  size: number = 10;
+  loadProducts() {
+    this.store.dispatch(getAllProducts({ page: this.page, size: this.size }));
+  }
+  /*products : Product[] = [
     {
       id: 1,
       name: 'EVAWIN ROSAWIN® GEL NETTOYANT MDZ',
@@ -67,5 +91,5 @@ export class AllProductsComponent {
       stock: true,
       imageUrl: 'https://parapharma.ma/36258-medium_default/svr-sun-secure-lait-biodegradable-spf-50-200ml.webp',
     }
-  ];
+  ];*/
 }

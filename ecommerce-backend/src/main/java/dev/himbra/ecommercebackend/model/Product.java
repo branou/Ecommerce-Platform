@@ -1,5 +1,6 @@
 package dev.himbra.ecommercebackend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import dev.himbra.ecommercebackend.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,24 +24,26 @@ public class Product extends BaseEntity {
     private String slug;
 
     //RELATIONSHIPS
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "sub_category_id")
     private SubCategory subCategory;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "brand_id")
     private Brand brand;
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
-
+    @JsonManagedReference
     @ManyToMany(mappedBy = "product")
     private List<Wishlist> wishlists;
-
 
    @Transient
     public BigDecimal getDiscountedPrice() {

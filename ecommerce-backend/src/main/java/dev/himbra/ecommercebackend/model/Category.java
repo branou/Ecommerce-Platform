@@ -1,4 +1,6 @@
 package dev.himbra.ecommercebackend.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,10 +16,10 @@ public class Category {
     private Long id;
 
     private String name;
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "category")
     private List<SubCategory> subCategories;
-
+    @JsonBackReference
     @OneToMany(mappedBy = "category")
     private List<Product> products;
 

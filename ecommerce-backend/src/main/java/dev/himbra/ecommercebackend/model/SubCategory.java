@@ -1,4 +1,5 @@
 package dev.himbra.ecommercebackend.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,11 +20,11 @@ public class SubCategory {
     private Long id;
 
     private String name;
-
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
+    @JsonBackReference
     @OneToMany(mappedBy = "subCategory")
     private List<Product> products = new ArrayList<>();
 

@@ -10,5 +10,16 @@ export interface Product {
   description: string;
   price: number;
   stock: boolean;
-  imageUrl: string;
+  imageUrls : string[];
+}
+
+export interface ApiResponse<T> {
+   pageNumber: number;
+   pageSize: number;
+   totalElements: number;
+   totalPages: number;
+   first: boolean;
+   last: boolean;
+   content: T[];
+
 }

@@ -1,4 +1,5 @@
 package dev.himbra.ecommercebackend.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +17,8 @@ public class Brand {
 
     private String name;
     private String url;
+
+    @JsonBackReference
     @OneToMany(mappedBy = "brand")
     private List<Product> products;
 

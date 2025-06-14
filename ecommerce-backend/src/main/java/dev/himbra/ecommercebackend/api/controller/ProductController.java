@@ -1,6 +1,7 @@
 package dev.himbra.ecommercebackend.api.controller;
 
 import dev.himbra.ecommercebackend.dto.PageResponse;
+import dev.himbra.ecommercebackend.dto.ProductReq;
 import dev.himbra.ecommercebackend.dto.ProductRequest;
 import dev.himbra.ecommercebackend.dto.ProductResponse;
 import dev.himbra.ecommercebackend.service.ProductService;
@@ -18,11 +19,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+    //admin
     @PostMapping(value = "/addProduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProductResponse> addProduct( @Valid @RequestPart("product") ProductRequest product,       // JSON part for product data
                                                        @RequestPart("images") List<MultipartFile> images) {
         // Logic to add a product
         return ResponseEntity.ok(productService.addProduct(product,images));
+    }
+    //this add method will be used for quick add products
+    @PostMapping("/addProductQuick")
+    public ResponseEntity<ProductResponse> addProductQuick(@Valid @RequestBody ProductReq productRequest) {
+        // Logic to add a product quickly
+        return ResponseEntity.ok(productService.addProductQuick(productRequest));
     }
     @PutMapping("/updateProduct/{productId}")
     public ResponseEntity<ProductResponse> updateProduct(@Valid @RequestBody ProductRequest productRequest, @PathVariable Long productId){

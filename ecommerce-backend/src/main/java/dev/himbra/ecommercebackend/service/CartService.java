@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -27,6 +28,9 @@ public class CartService {
     private final UserRepository userRepository;
     // Add methods to handle cart operations, such as adding items, removing items, and checking out.
     // Example method to add an item to the cart
+    public List<CartItem> getCartItems(long cartId){
+        return cartItemRepository.findByCart_Id(cartId);
+    }
     @Transactional
     public void addCartItemToCart(Long productId, int quantity, String guestId) {
         Product product = productRepository.findById(productId)
@@ -54,7 +58,7 @@ public class CartService {
     }
 
     private void addOrUpdateCartItem(Cart cart, Product product, int quantity) {
-        Optional<CartItem> cartItemOpt = cartItemRepository.findByCartIdAndProductId(cart.getId(), product.getId());
+        Optional<CartItem> cartItemOpt = cartItemRepository.findByCart_IdAndProduct_Id(cart.getId(), product.getId());
 
         if (cartItemOpt.isPresent()) {
             CartItem existingItem = cartItemOpt.get();
@@ -85,7 +89,7 @@ public class CartService {
 
             for (CartItem guestItem : guestCart.getItems()) {
                 Optional<CartItem> existing = cartItemRepository
-                        .findByCartIdAndProductId(userCart.getId(), guestItem.getProduct().getId());
+                        .findByCart_IdAndProduct_Id(userCart.getId(), guestItem.getProduct().getId());
 
                 if (existing.isPresent()) {
                     CartItem item = existing.get();
@@ -121,7 +125,7 @@ public class CartService {
                     .orElseThrow(() -> new EntityNotFoundException("Cart not found for guest ID: " + guestId));
         }
 
-        CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId)
+        CartItem cartItem = cartItemRepository.findByCart_IdAndProduct_Id(cart.getId(), productId)
                 .orElseThrow(() -> new EntityNotFoundException("Cart item not found for product ID: " + productId));
 
         cartItemRepository.delete(cartItem);

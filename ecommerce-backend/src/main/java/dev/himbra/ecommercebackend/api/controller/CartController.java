@@ -22,5 +22,10 @@ public class CartController {
         cartService.removeCartItemFromCart(productId,guestId);
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/items/{cartId}")
+    public ResponseEntity<?> getCartItems(@PathVariable long cartId) {
+        // Logic to get all items in the cart
+        return ResponseEntity.ok(cartService.getCartItems(cartId));
+    }
 
 }

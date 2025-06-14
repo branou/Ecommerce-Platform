@@ -1,9 +1,9 @@
 <div class="bg-gray-100">
-  <div class="container mx-auto px-4 py-8">
+  <div class="container mx-auto px-4 py-8" *ngIf="product$ | async as product">
     <div class="flex flex-wrap -mx-4">
       <!-- Product Images -->
       <div class="w-full md:w-1/2 px-4 mb-8 ">
-        <img src="https://parapharma.ma/31421-medium_default/svr-ampoule-b-30ml.webp" alt="Product"
+        <img src="{{product?.imageUrls}}" alt="Product"
              class="w-full h-auto rounded-lg shadow-md mb-4" id="mainImage">
         <div class="flex gap-4 py-4 justify-center overflow-x-auto">
         </div>
@@ -11,10 +11,10 @@
 
       <!-- Product Details -->
       <div class="w-full md:w-1/2 px-4">
-        <h2 class="text-3xl font-bold mb-2">SVR AMPOULE B3 - 30ML</h2>
+        <h2 class="text-3xl font-bold mb-2">{{product?.name}}</h2>
         <p class="text-gray-600 mb-4">SKU: WH1000XM4</p>
         <div class="mb-4">
-          <span class="text-2xl font-bold mr-2">249.99 DHS</span>
+          <span class="text-2xl font-bold mr-2">{{product?.price}} DHS</span>
           <span class="text-gray-500 line-through">269.99 DHS</span>
         </div>
         <p class="text-gray-700 mb-6">Concentré réparateur, repulpant et anti-rides composé d'acide hyaluronique et de vitamine B3 pour les peaux déshydratées et sèches.</p>

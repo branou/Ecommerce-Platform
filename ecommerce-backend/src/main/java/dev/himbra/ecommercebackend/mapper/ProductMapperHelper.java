@@ -23,7 +23,9 @@ public class ProductMapperHelper {
     private final BrandRepository brandRepository;
 
     public List<String> mapImageUrls(List<Image> images) {
-        if (images == null) return List.of();
+        if (images == null || images.isEmpty()) {
+            System.out.println("No images found, returning empty list");
+            return List.of();}
         return images.stream()
                 .map(Image::getUrl).toList();
     }

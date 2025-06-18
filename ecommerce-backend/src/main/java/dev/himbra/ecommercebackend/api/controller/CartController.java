@@ -1,5 +1,7 @@
 package dev.himbra.ecommercebackend.api.controller;
 
+import dev.himbra.ecommercebackend.dto.ProductRequest;
+import dev.himbra.ecommercebackend.model.Product;
 import dev.himbra.ecommercebackend.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;
-    @PostMapping("/addToCart/{productId}")
-    public ResponseEntity<?> addToCart(@PathVariable Long productId, @RequestParam int quantity, @RequestParam(required = false) String guestId) {
+    @PostMapping("/addToCart")
+    public ResponseEntity<?> addToCart(@RequestBody ProductRequest product, @RequestParam int quantity, @RequestParam(required = false) String guestId) {
         // Logic to add a product to the cart
-        cartService.addCartItemToCart(productId, quantity, guestId);
+        cartService.addCartItemToCart(product, quantity, guestId);
         return ResponseEntity.ok().build();
     }
     @DeleteMapping("/removeFromCart/{productId}")

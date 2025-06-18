@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId")
@@ -23,6 +25,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findPromotedProducts(Pageable pageable);
     @Query("SELECT p FROM Product p WHERE p.inStock = true")
     Page<Product> findInStockProducts(Pageable pageable);
-    
 
+
+    Optional<Product> findByName(String name);
 }

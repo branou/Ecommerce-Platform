@@ -1,5 +1,8 @@
 package dev.himbra.ecommercebackend.service;
 
+import dev.himbra.ecommercebackend.dto.CartItemResponse;
+import dev.himbra.ecommercebackend.dto.ProductRequest;
+import dev.himbra.ecommercebackend.mapper.CartItemMapper;
 import dev.himbra.ecommercebackend.model.Cart;
 import dev.himbra.ecommercebackend.model.CartItem;
 import dev.himbra.ecommercebackend.model.Product;
@@ -18,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -26,16 +30,19 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final CartItemMapper cartItemMapper;
     // Add methods to handle cart operations, such as adding items, removing items, and checking out.
     // Example method to add an item to the cart
-    public List<CartItem> getCartItems(long cartId){
-        return cartItemRepository.findByCart_Id(cartId);
+    public List<CartItemResponse> getCartItems(long cartId) {
+        List<CartItem> items = cartItemRepository.findByCart_Id(cartId);
+        return items.stream()
+                .map(cartItemMapper::toCartItemResponse)
+                .collect(Collectors.toList());
     }
     @Transactional
-    public void addCartItemToCart(Long productId, int quantity, String guestId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
-
+    public void addCartItemToCart(ProductRequest productRequest, int quantity, String guestId) {
+        Product product = productRepository.findByName(productRequest.name())
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with name: " + productRequest.name()));
         Cart cart = getOrCreateCart(guestId);
         addOrUpdateCartItem(cart, product, quantity);
     }

@@ -3,8 +3,6 @@ package dev.himbra.ecommercebackend.dto;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
-import java.util.List;
-
 public record ProductRequest(
         @NotBlank String name,
         String description,

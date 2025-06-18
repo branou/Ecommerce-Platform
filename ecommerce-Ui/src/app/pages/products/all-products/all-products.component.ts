@@ -5,6 +5,8 @@ import {Store} from '@ngrx/store';
 import {getAllProducts} from '../../../core/store/product/product.actions';
 import {selectAllProducts} from '../../../core/store/product/product.selectors';
 import {Router} from '@angular/router';
+import {addToCart, getCart} from '../../../core/store/cart/cart.actions';
+import {Product} from '../../../core/interfaces/model';
 
 @Component({
   selector: 'app-all-products',
@@ -39,8 +41,12 @@ export class AllProductsComponent implements OnInit{
   }
   page: number = 0;
   size: number = 10;
+  quantity:number=1
   loadProducts() {
     this.store.dispatch(getAllProducts({ page: this.page, size: this.size }));
+  }
+  addToShoppingCart(product: Product) {
+    this.store.dispatch(addToCart({product: product,quantity:this.quantity}))
   }
   /*products : Product[] = [
     {
@@ -92,4 +98,5 @@ export class AllProductsComponent implements OnInit{
       imageUrl: 'https://parapharma.ma/36258-medium_default/svr-sun-secure-lait-biodegradable-spf-50-200ml.webp',
     }
   ];*/
+
 }

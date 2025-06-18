@@ -21,5 +21,9 @@ export interface ApiResponse<T> {
    first: boolean;
    last: boolean;
    content: T[];
+}
 
+export interface CartItem{
+  product:Product,
+  quantity:number
 }

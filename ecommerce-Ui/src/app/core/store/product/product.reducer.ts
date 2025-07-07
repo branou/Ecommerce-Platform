@@ -1,6 +1,6 @@
 import {createReducer, on} from '@ngrx/store';
 import {ApiResponse, Product} from '../../interfaces/model';
-import {getAllProducts, getAllProductsFailure, getAllProductsSuccess} from './product.actions';
+import {getAllProducts, getAllProductsFailure, getAllProductsSuccess, search, searchSuccess} from './product.actions';
 export interface ProductState{
   response: ApiResponse<Product> | null;
   loading: boolean;
@@ -24,5 +24,14 @@ export const productReducer = createReducer(initialState,
   on(getAllProductsFailure,(state,{error})=>({
   ...state,
   loading: false,
-  error: error}))
+  error: error})),
+  on(search,(state)=>({
+    ...state,
+    loading: true
+  })),
+  on(searchSuccess,(state, {response})=>({
+    ...state,
+    loading: false,
+    response:response
+  }))
 );

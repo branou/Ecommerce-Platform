@@ -23,4 +23,15 @@ export class ProductEffects {
     )
   );
 
+  loadProduct$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProductActions.search),
+      exhaustMap(action =>
+        this.productService.searchProduct(action.term,action.page, action.size).pipe(
+          map(response => ProductActions.searchSuccess({ response })),
+        )
+      )
+    )
+  );
+
 }

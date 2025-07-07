@@ -2,6 +2,8 @@ import {Component, ElementRef, HostListener, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from "@angular/forms";
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
+import {Store} from '@ngrx/store';
+import {search} from '../../core/store/product/product.actions';
 
 @Component({
   selector: 'app-navbar',
@@ -30,7 +32,7 @@ export class NavbarComponent {
   isMegaMenuOpen = false;
   activeMegaMenu: string | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private store: Store) {}
 
 
 
@@ -43,18 +45,34 @@ export class NavbarComponent {
     this.isMegaMenuOpen = false;
     this.activeMegaMenu = null;
   }
-
+  page: number = 0;
+  size: number = 10;
   search() {
-    if (this.searchTerm.trim()) {
-      this.router.navigate(['/search'], { queryParams: { q: this.searchTerm } });
+    const term = this.searchTerm.trim();
+    if (term) {
+      this.router.navigate(['/search'], { queryParams: { q: term } });
+      this.store.dispatch(search({ term, page: this.page, size: this.size }));
+
       this.searchTerm = '';
       this.closeMegaMenu();
       this.isMenuOpen = false;
     }
   }
 
+
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
+  gotowishlist() {
+    this.router.navigate(['/wishlist'])
+  }
+
+  gotologin() {
+    this.router.navigate(['/login'])
+  }
+
+  gotoOrderHistory() {
+    this.router.navigate(['/order-history'])
+  }
 }

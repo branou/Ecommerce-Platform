@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-client-place',
@@ -7,5 +8,10 @@ import { Component } from '@angular/core';
   styleUrl: './client-place.component.scss'
 })
 export class ClientPlaceComponent {
+  constructor(private router : Router) {
+  }
 
+  gotopayment() {
+    this.router.navigate(['/checkout'])
+  }
 }

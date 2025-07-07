@@ -21,7 +21,10 @@ export class ProductService {
     return this.http.put<Product>(this.url+`/updateProduct/${product.id}`, product);
   }
   deleteProduct(id: number) {
-    return this.http.delete(this.url+`deleteProduct/${id}`);
+    return this.http.delete(this.url+`/deleteProduct/${id}`);
+  }
+  searchProduct(searchTerm: string,page: number = 0, size: number = 10){
+    return this.http.get<ApiResponse<Product>>(this.url+`/getAllProductsBySearch/${searchTerm}?page=${page}&size=${size}`);
   }
 
 }

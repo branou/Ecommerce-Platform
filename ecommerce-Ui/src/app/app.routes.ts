@@ -38,7 +38,7 @@ export const routes: Routes = [
     children: [
       { path: 'login', component: SigninComponent },
       { path: 'register', component: SignupComponent },
-      { path : 'contactus', component: ContactUsComponent}
+      { path: 'contactus', component: ContactUsComponent}
     ]
   }
 ];

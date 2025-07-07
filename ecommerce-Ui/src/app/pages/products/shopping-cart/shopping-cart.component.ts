@@ -5,6 +5,7 @@ import { getCart, removeFromCart } from '../../../core/store/cart/cart.actions';
 import { CommonModule } from '@angular/common';
 import { CartItem } from '../../../core/interfaces/model';
 import { Subscription } from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -21,6 +22,8 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   prix: number = 0;
   quantity: number = 0;
   private subscription?: Subscription;
+  constructor(private router: Router) {
+  }
 
   ngOnInit(): void {
     // Load the cart once (you may want to replace '1' with dynamic cartId)
@@ -47,9 +50,32 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
     this.subscription?.unsubscribe(); // Avoid memory leaks
   }
 
-  minusQuantity(id: number) {
+  private recalculateTotal(): void {
+    this.prix = this.products.reduce(
+      (total, cartItem) => total + cartItem.product.price * cartItem.quantity,
+      0
+    );
+  }
+  addQuantity(productId: number) {
+    const item = this.products.find(p => p.product.id === productId);
+    if (item) {
+      item.quantity += 1;
+      this.products = [...this.products]; // clone pour forcer Angular à redessiner
+      this.recalculateTotal();
+    }
   }
 
-  addQuantity(id: number) {
-    this.products.at(0).quantity +=1;  }
+  minusQuantity(productId: number) {
+    const item = this.products.find(p => p.product.id === productId);
+    if (item && item.quantity > 1) {
+      item.quantity -= 1;
+      this.products = [...this.products]; // clone pour forcer Angular à redessiner
+      this.recalculateTotal();
+    }
+  }
+
+
+  gotoclientinfo() {
+    this.router.navigate(['/client'])
+  }
 }

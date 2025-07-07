@@ -1,12 +1,14 @@
 import { Component } from '@angular/core'
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
 @Component({
   selector: 'app-signin',
   imports: [CommonModule,
     FormsModule],
   templateUrl: './signin.component.html',
-  styleUrl: './signin.component.scss'
+  styleUrl: './signin.component.scss',
+  standalone: true
 })
 export class SigninComponent {
   formData = {
@@ -14,10 +16,10 @@ export class SigninComponent {
     password: '',
   };
 
+  constructor(private route : Router) {
+  }
+
   onSubmit(form: any) {
-    if (form.valid) {
-      console.log('Login data:', this.formData);
-      // Call your service here
-    }
+    this.route.navigate(['/products']);
   }
 }

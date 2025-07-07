@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -10,12 +11,17 @@ import {CommonModule} from '@angular/common';
   standalone: true
 })
 export class SignupComponent {
+  constructor(private router: Router) {
+  }
   formData = {
+    firstname: '',
+    lastname: '',
     email: '',
     password: '',
   };
 
   onSubmit(form: any) {
+    this.router.navigate(['/login'])
     if (form.valid) {
       console.log('Login data:', this.formData);
       // Call your service here

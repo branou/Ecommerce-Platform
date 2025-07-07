@@ -1,4 +1,8 @@
-import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideZoneChangeDetection,
+  isDevMode,APP_INITIALIZER
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -10,9 +14,22 @@ import {productReducer} from './core/store/product/product.reducer';
 import {ProductEffects} from './core/store/product/product.effect';
 import {cartReducer} from './core/store/cart/cart.reducer';
 import {CartEffects} from './core/store/cart/cart.effect';
+import {KeycloakService} from './core/services/keycloak.service';
+
+function initKeycloak(kc:KeycloakService) {
+  return kc.init();
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(), provideStore({products:productReducer,carts:cartReducer}), provideEffects(ProductEffects,CartEffects), provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })]
+    provideHttpClient(), provideStore({products:productReducer,carts:cartReducer}), provideEffects(ProductEffects,CartEffects),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    {
+      provide:APP_INITIALIZER,
+      useFactory:initKeycloak,
+      multi:true,
+      deps: [KeycloakService]
+    }
+  ]
 };

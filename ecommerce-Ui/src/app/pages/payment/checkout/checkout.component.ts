@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -7,5 +8,9 @@ import { Component } from '@angular/core';
   styleUrl: './checkout.component.scss'
 })
 export class CheckoutComponent {
-
+  constructor(private router: Router) {
+  }
+  paymentfailed() {
+    this.router.navigate(['/paymentFailed'])
+  }
 }

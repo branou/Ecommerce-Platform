@@ -41,7 +41,7 @@ export class AllProductsComponent implements OnInit{
   }
   page: number = 0;
   size: number = 10;
-  quantity:number=1
+  quantity:number = 1;
   loadProducts() {
     this.store.dispatch(getAllProducts({ page: this.page, size: this.size }));
   }
@@ -99,4 +99,7 @@ export class AllProductsComponent implements OnInit{
     }
   ];*/
 
+  gotoaccueil() {
+    this.router.navigate(['/acceuil']);
+  }
 }

@@ -9,7 +9,6 @@ import java.util.List;
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @Builder
 public class User {
-
     @Id
     private String id; // Store Keycloak UUID as the primary key
 

@@ -82,5 +82,12 @@ public class ProductController {
                                                                                     @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(productService.getProductsByKeyword(searchTerm, page, size));
     }
-
+    @PostMapping("/addToWishlist")
+    public void addToWishlist(@RequestBody ProductRequest productRequest){
+        productService.addProductToWishlist(productRequest);
+    }
+    @GetMapping("/getProductsWishlist")
+    public List<ProductResponse> getWishlist(){
+        return productService.getProductsWishlist();
+    }
 }

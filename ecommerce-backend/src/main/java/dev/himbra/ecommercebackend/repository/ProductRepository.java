@@ -1,6 +1,7 @@
 package dev.himbra.ecommercebackend.repository;
 
 import dev.himbra.ecommercebackend.model.Product;
+import dev.himbra.ecommercebackend.model.Wishlist;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findPromotedProducts(Pageable pageable);
     @Query("SELECT p FROM Product p WHERE p.inStock = true")
     Page<Product> findInStockProducts(Pageable pageable);
-
-
     Optional<Product> findByName(String name);
 }

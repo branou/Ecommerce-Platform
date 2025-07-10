@@ -12,9 +12,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -25,6 +32,8 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
     private final BrandRepository brandRepository;
+    private final WishlistRepository wishlistRepository;
+    private final UserRepository userRepository;
     // A method that handle Add product operation
     public ProductResponse addProduct(ProductRequest productRequest,List<MultipartFile> images) {
         Product product = productMapper.toProduct(productRequest);
@@ -217,6 +226,40 @@ public class ProductService {
                 products.map(productMapper::toProductDTO).getContent()
         );
     }
+    @Transactional
+    public void addProductToWishlist(ProductRequest productRequest){
+        //handle user using keycloak
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId;
+        Optional<User> user = Optional.empty();
+        Optional<Wishlist> wishlist = Optional.empty();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            userId = jwtAuth.getToken().getClaim("sub");
+            user = userRepository.findById(userId);
+            wishlist = wishlistRepository.getByUser_Id(userId);}
+        //create or get the wishlist of the user
+        Wishlist wishlist1 = new Wishlist();
+        if(wishlist.isPresent()){
+            wishlist1 = wishlist.get();
+            List<Product> products = wishlist1.getProduct();
+            products.add(productMapper.toProduct(productRequest));
+            wishlist1.setProduct(products);
+        }else {
+            if(user.isPresent()){
+            wishlist1 = Wishlist.builder().user(user.get())
+                    .product(List.of(productMapper.toProduct(productRequest))).build();}
+        }
+        wishlistRepository.save(wishlist1);
+    }
 
+    public List<ProductResponse> getProductsWishlist(){
+        Optional<Wishlist> wishlist = wishlistRepository.getByUser_Id("1");
+        List<ProductResponse> products = new ArrayList<>();
+        if(wishlist.isPresent()){
+            products = wishlist.get().getProduct().stream().map(productMapper::toProductDTO).toList();
+        }
+        return products;
+    }
 
 }
+

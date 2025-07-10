@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity @Builder
 @Table(name = "wishlists")
 public class Wishlist {
     @Id

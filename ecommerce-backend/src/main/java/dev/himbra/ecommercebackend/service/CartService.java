@@ -56,7 +56,7 @@ public class CartService {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
 
-            return cartRepository.findByUserId(userId)
+            return cartRepository.findByUser_Id(userId)
                     .orElseGet(() -> cartRepository.save(Cart.builder().user(user).build()));
         }
 
@@ -83,7 +83,7 @@ public class CartService {
 
     public void transferGuestCartToUser(String guestId, String userId) {
         Optional<Cart> guestCartOpt = cartRepository.findByGuestId(guestId);
-        Optional<Cart> userCartOpt = cartRepository.findByUserId(userId);
+        Optional<Cart> userCartOpt = cartRepository.findByUser_Id(userId);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
 
@@ -125,7 +125,7 @@ public class CartService {
 
         if (authentication instanceof JwtAuthenticationToken jwtAuth) {
             String userId = jwtAuth.getToken().getClaim("sub");
-            cart = cartRepository.findByUserId(userId)
+            cart = cartRepository.findByUser_Id(userId)
                     .orElseThrow(() -> new EntityNotFoundException("Cart not found for user ID: " + userId));
         } else {
             cart = cartRepository.findByGuestId(guestId)

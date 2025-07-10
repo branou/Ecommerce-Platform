@@ -1,9 +1,11 @@
-import {Component, ElementRef, HostListener, inject} from '@angular/core';
+import {Component, effect, ElementRef, HostListener, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from "@angular/forms";
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {search} from '../../core/store/product/product.actions';
+import Keycloak from 'keycloak-js';
+import {KEYCLOAK_EVENT_SIGNAL, KeycloakEventType, ReadyArgs, typeEventArgs} from 'keycloak-angular';
 
 @Component({
   selector: 'app-navbar',
@@ -31,8 +33,26 @@ export class NavbarComponent {
   isMenuOpen = false;
   isMegaMenuOpen = false;
   activeMegaMenu: string | null = null;
+  authenticated = false;
+  keycloakStatus: string | undefined;
+  private readonly keycloak = inject(Keycloak);
+  private readonly keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
 
-  constructor(private router: Router, private store: Store) {}
+  constructor(private router: Router, private store: Store) {
+    effect(() => {
+      const keycloakEvent = this.keycloakSignal();
+
+      this.keycloakStatus = keycloakEvent.type;
+
+      if (keycloakEvent.type === KeycloakEventType.Ready) {
+        this.authenticated = typeEventArgs<ReadyArgs>(keycloakEvent.args);
+      }
+
+      if (keycloakEvent.type === KeycloakEventType.AuthLogout) {
+        this.authenticated = false;
+      }
+    });
+  }
 
 
 
@@ -68,8 +88,12 @@ export class NavbarComponent {
     this.router.navigate(['/wishlist'])
   }
 
-  gotologin() {
-    this.router.navigate(['/login'])
+  login() {
+    this.keycloak.login();
+  }
+
+  logout() {
+    this.keycloak.logout();
   }
 
   gotoOrderHistory() {

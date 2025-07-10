@@ -27,3 +27,9 @@ export interface CartItem{
   product:Product,
   quantity:number
 }
+export interface User{
+  name: string;
+  email?: string;
+  username?: string;
+}
+

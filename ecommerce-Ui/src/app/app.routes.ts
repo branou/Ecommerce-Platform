@@ -13,6 +13,9 @@ import {ContactUsComponent} from './pages/contact-us/contact-us.component';
 import {DefaultLayoutComponent} from './layouts/default-layout/default-layout.component';
 import {FullLayoutComponent} from './layouts/full-layout/full-layout.component';
 import {ClientPlaceComponent} from './pages/client-place/client-place.component';
+import {canActivateAuthRole} from './core/guards/auth.guard';
+import {ForbiddenComponent} from './pages/forbidden/forbidden.component';
+import {UserProfileComponent} from './pages/user-profile/user-profile.component';
 
 export const routes: Routes = [
 
@@ -29,16 +32,20 @@ export const routes: Routes = [
       { path : 'products/:id', component: ProductDetailComponent},
       { path : 'wishlist', component: WishlistComponent},
       { path : 'order-history', component: OrderHistoryComponent},
-      { path : 'client', component: ClientPlaceComponent}
+      { path : 'client', component: ClientPlaceComponent, canActivate:[canActivateAuthRole], data: { role: 'ADMIN' }  }
     ]
   },
   {
     path: '',
     component: FullLayoutComponent,
     children: [
-      { path: 'login', component: SigninComponent },
+      { path: 'login', component: SigninComponent ,canActivate:[canActivateAuthRole], data: { role: 'ADMIN' }},
       { path: 'register', component: SignupComponent },
-      { path: 'contactus', component: ContactUsComponent}
+      { path: 'contactus', component: ContactUsComponent},
+      { path: 'forbidden', component: ForbiddenComponent},
+      { path: 'profile', component: UserProfileComponent}
     ]
-  }
+  },
+  { path: '', redirectTo: '/acceuil', pathMatch: 'full' }
+
 ];

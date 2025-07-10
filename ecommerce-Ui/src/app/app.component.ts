@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Component, effect, inject} from '@angular/core';
+import {Router, RouterOutlet} from '@angular/router';
+import {KEYCLOAK_EVENT_SIGNAL, KeycloakEventType} from 'keycloak-angular';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +11,8 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'ecommerce-Ui';
+  private readonly keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
+  router = inject(Router)
+  constructor() {
+  }
 }

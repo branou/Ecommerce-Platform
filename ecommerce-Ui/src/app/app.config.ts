@@ -1,12 +1,12 @@
 import {
   ApplicationConfig,
   provideZoneChangeDetection,
-  isDevMode,APP_INITIALIZER
+  isDevMode
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient} from '@angular/common/http';
+import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import { provideStore} from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
@@ -14,22 +14,16 @@ import {productReducer} from './core/store/product/product.reducer';
 import {ProductEffects} from './core/store/product/product.effect';
 import {cartReducer} from './core/store/cart/cart.reducer';
 import {CartEffects} from './core/store/cart/cart.effect';
-import {KeycloakService} from './core/services/keycloak.service';
-
-function initKeycloak(kc:KeycloakService) {
-  return kc.init();
-}
+import { includeBearerTokenInterceptor} from 'keycloak-angular';
+import {provideKeycloakAngular} from './keycloak.config';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }),
+  providers: [
+    provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
+    provideKeycloakAngular(),
+    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(), provideStore({products:productReducer,carts:cartReducer}), provideEffects(ProductEffects,CartEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    {
-      provide:APP_INITIALIZER,
-      useFactory:initKeycloak,
-      multi:true,
-      deps: [KeycloakService]
-    }
   ]
 };

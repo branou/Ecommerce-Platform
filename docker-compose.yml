@@ -104,6 +104,7 @@ services:
     depends_on:
       - postgres-service
 
+
 networks:
   backend:
     driver: bridge
@@ -115,8 +116,6 @@ volumes:
   pgadmin_data:
   postgres_data_keycloak:
   keycloak-data:
-
-
 
  ######################################################################################
   # MongoDB service
